@@ -24,8 +24,7 @@ public final class R {
         public static final int scrollbar_vertical_track=0x7f020004;
     }
     public static final class id {
-        public static final int empty_view=0x7f080005;
-        public static final int horaire_list=0x7f080004;
+        public static final int empty_view=0x7f080004;
         public static final int horaire_logo=0x7f080000;
         public static final int horaire_name=0x7f080001;
         public static final int param_icon=0x7f080003;
@@ -42,16 +41,21 @@ public final class R {
         public static final int horaire_name=0x7f060001;
         public static final int logo_description=0x7f060003;
         public static final int param_icon_description=0x7f060004;
+        public static final int scroll_text=0x7f060005;
     }
     public static final class style {
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     
+
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        
          */
         public static final int HoWiBaseTheme=0x7f070000;
         /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int HoWiTheme=0x7f070001;
     }

@@ -17,14 +17,6 @@
         android:layout_height="50dp"
         android:background="#77F5F5F5"
         android:orientation="horizontal">
-        <!-- <ImageView
-            android:id="@+id/horaire_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:scaleType="fitStart"
-            android:adjustViewBounds="true"
-            android:src="@drawable/sunny" />-->
 
         <ImageView
             android:id="@+id/horaire_logo"
@@ -66,33 +58,34 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:background="#77F5F5F5">
-        <ListView
+        
+        <!-- <ListView
             android:id="@+id/horaire_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" 
+            android:layout_height="match_parent"
             android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-    		android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track"
-        />
+    		android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track"/>-->
+    		
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:visibility="gone"
-            android:textColor="#ffffff"
+            android:textColor="#000"
             android:text="@string/empty_view_text"
             android:textSize="20sp" />
+        
     </FrameLayout>
 
     <!-- <Button
-        android:id="@+id/refresh"
+        android:id="@+id/bouton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:gravity="center"
         android:background="#F8F8F8"
-        android:text="@string/refresh"
-        android:textAllCaps="true"
+        android:text="@string/scroll_text"
         android:textColor="#232323"
-        android:textSize="14sp" />-->
+        android:textSize="14sp"
+        android:onClick="sendMessage" />-->
 </LinearLayout>
