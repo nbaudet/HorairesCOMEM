@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Horaires COMEM</string>
+    <string name="horaire_name">Horaire XY</string>
+    <string name="empty_view_text">Pas d\'horaire à afficher</string>
+    <string name="logo_description">Logo de l\'application</string>
+    <string name="param_icon_description">Icône des paramètres</string>
+
+</resources>

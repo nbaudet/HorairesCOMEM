@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/widget_margin_bottom"
+    android:layout_marginLeft="@dimen/widget_margin_left"
+    android:layout_marginRight="@dimen/widget_margin_right"
+    android:layout_marginTop="@dimen/widget_margin_top"
+    android:baselineAligned="true"
+    android:orientation="vertical" >
+
+    <!-- We define separate margins to allow for flexibility in twiddling the margins
+         depending on device form factor and target SDK version. -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="#77F5F5F5"
+        android:orientation="horizontal">
+        <!-- <ImageView
+            android:id="@+id/horaire_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:src="@drawable/sunny" />-->
+
+        <ImageView
+            android:id="@+id/horaire_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/logo_description"
+            android:padding="3dp"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/horaire_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.1"
+            android:text="@string/horaire_name"
+            android:textAllCaps="false"
+            android:textColor="#232323"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/param_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:contentDescription="@string/param_icon_description"
+            android:padding="12dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/params" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:background="#77F5F5F5">
+        <ListView
+            android:id="@+id/horaire_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+    		android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track"
+        />
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:text="@string/empty_view_text"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+    <!-- <Button
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="#F8F8F8"
+        android:text="@string/refresh"
+        android:textAllCaps="true"
+        android:textColor="#232323"
+        android:textSize="14sp" />-->
+</LinearLayout>
