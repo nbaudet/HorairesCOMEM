@@ -1,4 +1,4 @@
-package ch.comem;
+package ch;
 
 /**
  * @author nicolas
