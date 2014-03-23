@@ -5,6 +5,7 @@ package ch.comem;
 
 import java.util.Random;
 
+import android.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -71,6 +73,15 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 
     // XXX: clear the worker queue if we are destroyed?
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+    	
+    	// Code qui ne fonctionne pas...
+    	TextView txt = (Textview) findViewById(R.id.empty_view);
+    	txt.setText("Ceci est un test");
+    }
+    
     @Override
     public void onEnabled(Context context) {
         // Register for external updates to the data to trigger an update of the widget.  When using
@@ -136,6 +147,13 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         super.onReceive(ctx, intent);
     }
 
+    /**
+     * Construit l'interface du widget à partir d'une RemoteView.
+     * @param context
+     * @param appWidgetId
+     * @param largeLayout
+     * @return
+     */
     private RemoteViews buildLayout(Context context, int appWidgetId, boolean largeLayout) {
         RemoteViews rv;
         if (largeLayout) {
@@ -144,7 +162,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             final Intent intent = new Intent(context, HoraireWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout); // Déclare le layout à utiliser pour la RemoteView
             rv.setRemoteAdapter(appWidgetId, R.id.horaire_list, intent);
 
             // Set the empty view to be displayed if the collection is empty.  It must be a sibling

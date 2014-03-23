@@ -24,16 +24,20 @@ public final class R {
         public static final int scrollbar_vertical_track=0x7f020004;
     }
     public static final class id {
-        public static final int empty_view=0x7f080004;
-        public static final int horaire_logo=0x7f080000;
-        public static final int horaire_name=0x7f080001;
-        public static final int param_icon=0x7f080003;
-        public static final int widget_item=0x7f080002;
+        public static final int empty_view=0x7f080007;
+        public static final int horaire_logo=0x7f080003;
+        public static final int horaire_name=0x7f080004;
+        public static final int param_icon=0x7f080006;
+        public static final int tab1=0x7f080000;
+        public static final int tab2=0x7f080001;
+        public static final int tab3=0x7f080002;
+        public static final int widget_item=0x7f080005;
     }
     public static final class layout {
-        public static final int not_used_widget_layout_small=0x7f030000;
-        public static final int widget_item=0x7f030001;
-        public static final int widget_layout=0x7f030002;
+        public static final int configuration=0x7f030000;
+        public static final int not_used_widget_layout_small=0x7f030001;
+        public static final int widget_item=0x7f030002;
+        public static final int widget_layout=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f060000;

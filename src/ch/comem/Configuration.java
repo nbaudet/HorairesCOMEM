@@ -1,21 +1,19 @@
-package ch;
+package ch.comem;
 
-/**
- * @author nicolas
- *
- */
-public class Configuration {
-	
-	public void sendMessage(View view) {
-	    // Do something in response to button
-	}
-	
+import android.app.Activity;
+import android.os.Bundle;
+
+public class Configuration extends Activity {
+
 	/**
-	 * @param args
+	 * Fonction appelée lorsque l'activité est crée pour la première fois.
+	 * C'est ici qu'il faut générer les petits objets que l'on régénère régulièrement
+	 * comme les listes de profs, classe ou modules.
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// Définition de la vue à utiliser
+		setContentView(R.layout.configuration);
 	}
 
 }
