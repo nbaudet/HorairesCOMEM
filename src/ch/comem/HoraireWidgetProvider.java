@@ -5,7 +5,6 @@ package ch.comem;
 
 import java.util.Random;
 
-import android.R;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -78,8 +77,8 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     	super.onCreate(savedInstanceState);
     	
     	// Code qui ne fonctionne pas...
-    	TextView txt = (Textview) findViewById(R.id.empty_view);
-    	txt.setText("Ceci est un test");
+    	final TextView txt = (TextView) findViewById(R.id.horaire_name);
+    	txt.setText("Horaire XYz");
     }
     
     @Override

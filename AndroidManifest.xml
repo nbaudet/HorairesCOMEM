@@ -23,7 +23,7 @@
         qui s'exécutera à chaque fois qu'une intention correspondante sera
         diffusée par le système ou une application.
         Permet de donner les informations concernant l'horaire à la vue -->
-        <receiver android:name="ch.HoraireWidgetProvider">
+        <receiver android:name="ch.comem.HoraireWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -33,7 +33,7 @@
         </receiver>
 
         <!-- Le service qui fournit les nouveaux horaires à intervalles réguliers -->
-        <service android:name="ch.HoraireWidgetService"
+        <service android:name="ch.comem.HoraireWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
 
@@ -43,7 +43,7 @@
         <provider android:name="ch.comem.HoraireDataProvider"
               android:authorities="ch.comem.horairelistwidget.provider" />
         
-        <activity android:name="ch.comem.Configuration" >
+        <activity android:name=".Configuration" >
             <intent-filter>
                 <action android:name="android.apwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
