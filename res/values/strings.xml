@@ -4,7 +4,7 @@
     <string name="horaire_name">Horaire XY</string>
     <string name="empty_view_text">Configurez votre horaire en cliquant sur l\'icône en haut à droite.</string>
     <string name="logo_description">Logo de l\'application</string>
-    <string name="param_icon_description">Icône des paramètres</string>
+    <string name="config_button_description">Icône des paramètres</string>
     <string name="scroll_text">blabla</string>
 
 </resources>

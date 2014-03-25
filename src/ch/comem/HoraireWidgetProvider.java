@@ -20,12 +20,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Our data observer just notifies an update for all weather widgets when it detects a change.
+ * Notre observateur de données notifie tous les widgets quand il détecte un changement.
  */
 class HoraireDataProviderObserver extends ContentObserver {
     private AppWidgetManager mAppWidgetManager;
@@ -43,7 +46,7 @@ class HoraireDataProviderObserver extends ContentObserver {
         // In response, the factory's onDataSetChanged() will be called which will requery the
         // cursor for the new data.
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
-                mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.horaire_list);
+        		mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.horaire_list);
     }
 }
 
@@ -51,9 +54,9 @@ class HoraireDataProviderObserver extends ContentObserver {
  * The weather widget's AppWidgetProvider.
  */
 public class HoraireWidgetProvider extends AppWidgetProvider {
-    public static String CLICK_ACTION = "com.example.android.horairelistwidget.CLICK";
-    public static String REFRESH_ACTION = "com.example.android.horairelistwidget.REFRESH";
-    public static String EXTRA_DAY_ID = "com.example.android.horairelistwidget.day";
+    public static String CLICK_ACTION = "ch.comem.CLICK";
+    public static String REFRESH_ACTION = "ch.comem.REFRESH";
+    public static String EXTRA_DAY_ID = "ch.comem.day";
 
     private static HandlerThread sWorkerThread;
     private static Handler sWorkerQueue;
@@ -79,6 +82,25 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     	// Code qui ne fonctionne pas...
     	final TextView txt = (TextView) findViewById(R.id.horaire_name);
     	txt.setText("Horaire XYz");
+    	
+    	// Listener sur le bouton de configuration
+    	//addListenerConfigurationButton();
+    	Button imgBtn = (Button) findViewById(R.id.button_test);
+    	
+    	imgBtn.setOnClickListener(new OnClickListener() {
+    		@Override
+    		public void onClick(View v){
+    			Toast.makeText(getApplicationContext(), "Prout", Toast.LENGTH_SHORT).show();
+    		}
+    	});
+    }
+    
+    /**
+     * Gestion du clic sur l'icône de configuration, permet d'ouvrir la vue Configuration.
+     */
+    public void addListenerConfigurationButton(){
+    	//ImageView imgBtn = (ImageView) findViewById(R.id.config_button);
+    	
     }
     
     @Override
@@ -100,7 +122,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context ctx, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(REFRESH_ACTION)) {
-            // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
+            /*// BroadcastReceivers have a limited amount of time to do work, so for this sample, we
             // are triggering an update of the data on another thread.  In practice, this update
             // can be triggered from a background service, or perhaps as a result of user actions
             // inside the main application.
@@ -133,14 +155,12 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             });
 
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
+                    AppWidgetManager.INVALID_APPWIDGET_ID);*/
         } else if (action.equals(CLICK_ACTION)) {
             // Show a toast
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            final String day = intent.getStringExtra(EXTRA_DAY_ID);
-            final String formatStr = ctx.getResources().getString(R.string.toast_format_string);
-            Toast.makeText(ctx, String.format(formatStr, day), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "prout", Toast.LENGTH_SHORT).show();
         }
 
         super.onReceive(ctx, intent);
@@ -209,22 +229,29 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // Update each of the widgets with the remote adapter
+        
+    	super.onUpdate(context, appWidgetManager, appWidgetIds);
+    	
+    	// Update each of the widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
             RemoteViews layout = buildLayout(context, appWidgetIds[i], mIsLargeLayout);
             appWidgetManager.updateAppWidget(appWidgetIds[i], layout);
+            
+        	/*Intent intent = new Intent(context, Mainpage.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);*/
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        
     }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId, Bundle newOptions) {
 
-        int minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        /*int minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int maxWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-        int maxHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
+        int maxHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);*/
 
         RemoteViews layout;
         if (minHeight < 100) {

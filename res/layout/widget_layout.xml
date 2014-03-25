@@ -38,7 +38,18 @@
             android:textColor="#232323"
             android:textSize="24sp" />
 
-        <ImageView
+        <ImageView android:id="@+id/config_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:contentDescription="@string/config_button_description"
+			android:padding="12dp"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:src="@drawable/params"
+            android:clickable="true"
+		/>
+        <!-- <ImageView
             android:id="@+id/param_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,34 +59,40 @@
             android:contentDescription="@string/param_icon_description"
             android:padding="12dp"
             android:scaleType="fitStart"
-            android:src="@drawable/params" />
+            android:src="@drawable/params" /> -->
 
     </LinearLayout>
-
-    <FrameLayout
+    
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center|top"
         android:layout_weight="1"
-        android:layout_gravity="center"
-        android:background="#77F5F5F5">
+        android:orientation="vertical" >
+
+        <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
+	    <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
+	    <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
+	    <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
+	    <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
+	    <include layout="@layout/display_date" />
+	    <include layout="@layout/display_timetables" />
         
         <!-- <ListView
             android:id="@+id/horaire_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="#fff"
             android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-    		android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track"/>-->
-    		
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="#000"
-            android:text="@string/empty_view_text"
-            android:textSize="20sp" />
+            android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track" >
+        </ListView>-->
         
-    </FrameLayout>
+    </LinearLayout>
 
     <!-- <Button
         android:id="@+id/bouton"
@@ -88,4 +105,5 @@
         android:textColor="#232323"
         android:textSize="14sp"
         android:onClick="sendMessage" />-->
+
 </LinearLayout>

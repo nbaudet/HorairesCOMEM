@@ -2,9 +2,11 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_item"
     android:layout_width="match_parent"
-    android:layout_height="46dp"
-    android:paddingLeft="25dp"
+    android:layout_height="25dp"
+    android:paddingLeft="5dp"
     android:gravity="center_vertical"
     android:background="#77F5F5F5"
     android:textColor="#232323"
-    android:textSize="20sp" />
+    android:textSize="15sp"
+    android:text="Mardi 1 avril 2014" />
+
