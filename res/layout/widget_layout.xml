@@ -46,7 +46,7 @@
 			android:padding="12dp"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
-            android:src="@drawable/params"
+            android:src="@drawable/selection_state_config_button"
             android:clickable="true"
 		/>
         <!-- <ImageView

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Màj toutes les 24h = 86400000 -->
 <appwidget-provider
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:label="@string/app_name"
 	android:minWidth="280dp"
 	android:minHeight="180dp"
-	android:updatePeriodMillis="3600000"
+	android:updatePeriodMillis="86400000"
 	android:initialLayout="@layout/widget_layout"
 	android:resizeMode="horizontal|vertical"
 	android:minResizeWidth="280dp"
 	android:minResizeHeight="70dp"
-	android:previewImage="@drawable/preview" >
+	android:previewImage="@drawable/preview"
+	android:configure=".ch.Comem.HorairesCOMEM.Configuration" >
 </appwidget-provider>

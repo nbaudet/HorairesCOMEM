@@ -15,7 +15,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import ch.Comem.horairescomem.R;
+import ch.Comem.HorairesCOMEM.R;
 
 /**
  * Notre observateur de données notifie tous les widgets quand il détecte un changement.
@@ -45,7 +45,8 @@ class HoraireDataProviderObserver extends ContentObserver {
  */
 public class HoraireWidgetProvider extends AppWidgetProvider {
     public static String TAG = "HoraireWidgetProvider";
-	public static String ACTION_CONFIG_CLICKED = "ch.comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
+	public static String ACTION_CONFIG_CLICKED = "ch.Comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
+	public static String FORCE_WIDGET_UPDATE = "ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE";
 
     public HoraireWidgetProvider() {
     	
@@ -84,6 +85,12 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 	        // Ouverture de l'activity de configuration
         	Toast.makeText(ctx, "Horaire Widget : Config cliqué !", Toast.LENGTH_SHORT).show();
 	    }
+        
+        else if (FORCE_WIDGET_UPDATE.equals(action)){
+        	Toast.makeText(ctx, "HoraireCOMEM FORCE WIDGET UPDATE", Toast.LENGTH_SHORT).show();
+        	// TODO: mettre à jour le widget
+        	// On peut le lancer comme suit : sendBroadcast(new Intent(HoraireWidgetProvider .FORCE_WIDGET_UPDATE));
+        }
         
         /*if (action.equals(REFRESH_ACTION)) {
             // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
@@ -131,7 +138,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     }
 
     /**
-     * Construit l'interface du widget à partir d'une RemoteView.
+     * Construit l'interface à jour du widget dans une vue distante et la renvoie.
      * @param context
      * @param appWidgetId
      * @param largeLayout
@@ -200,14 +207,21 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
     	
-    	// Intent lors du clic sur le bouton de configuration
-    	Intent intent = new Intent(ACTION_CONFIG_CLICKED);
-    	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-    	RemoteViews layout_test = buildLayout(context, appWidgetIds[0], true);
-    	layout_test.setOnClickPendingIntent(R.id.config_button, pendingIntent);
+    	// Récupération de la vue distante
+    	RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
     	
-    	Log.v(TAG, "Dans onUpdate");
-    	Toast.makeText(context, "Horaire Widget dans onUpdate", Toast.LENGTH_SHORT).show();
+    	// Écouteur de clic sur le bouton de configuration
+    	//Intent intent = new Intent(ACTION_CONFIG_CLICKED);
+    	Intent intent = new Intent(context, Configuration.class);
+    	PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
+    	rv.setOnClickPendingIntent(R.id.config_button, pi);
+    	
+    	// Changement d'un titre
+    	rv.setTextViewText(R.id.horaire_name, "MIT40");
+    	
+    	// Cet appel permet de mettre à jour les widgets    	
+    	appWidgetManager.updateAppWidget(appWidgetIds, rv);
+    	
     	
     	// Update each of the widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
@@ -218,6 +232,8 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);*/
         }
+        
+        
         
     }
 
