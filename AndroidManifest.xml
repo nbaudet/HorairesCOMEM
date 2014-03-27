@@ -16,7 +16,7 @@
         android:theme="@style/HoWiBaseTheme">
         
         <!-- Déclaration de l'activité de configuration du widget -->
-        <activity android:name="ch.Comem.HorairesCOMEM.Configuration" >
+        <activity android:name=".Configuration" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

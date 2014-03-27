@@ -18,6 +18,9 @@ public class Configuration extends Activity {
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
+		Toast.makeText(getApplicationContext(), "HoWi:Configuration.onCreate", Toast.LENGTH_LONG).show();
+		
 		super.onCreate(savedInstanceState);
 		// Définition de la vue à utiliser
 		setContentView(R.layout.configuration);

@@ -44,9 +44,11 @@ class HoraireDataProviderObserver extends ContentObserver {
  * The weather widget's AppWidgetProvider.
  */
 public class HoraireWidgetProvider extends AppWidgetProvider {
-    public static String TAG = "HoraireWidgetProvider";
+    
+	public static String TAG = "HoraireWidgetProvider";
 	public static String ACTION_CONFIG_CLICKED = "ch.Comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
 	public static String FORCE_WIDGET_UPDATE = "ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE";
+	public static String EXTRA_APPWIDGET_ID;
 
     public HoraireWidgetProvider() {
     	
@@ -76,10 +78,10 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context ctx, Intent intent) {
         final String action = intent.getAction();
         
-        Toast.makeText(ctx, "Horaire Widget dans onReceive", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ctx, "HoWi:onReceive, TAG : " + action, Toast.LENGTH_SHORT).show();
         
         // Réception du click sur le bouton de configuration
-        Log.d(TAG, "onReceive() " + intent.getAction());
+        Log.d(TAG, "onReceive() " + action);
         
         if (ACTION_CONFIG_CLICKED.equals(action)){
 	        // Ouverture de l'activity de configuration
@@ -205,14 +207,20 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         
+    	Toast.makeText(context, "HoWi:onUpdate", Toast.LENGTH_SHORT).show();
+    	
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
     	
     	// Récupération de la vue distante
     	RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
     	
     	// Écouteur de clic sur le bouton de configuration
-    	//Intent intent = new Intent(ACTION_CONFIG_CLICKED);
-    	Intent intent = new Intent(context, Configuration.class);
+    	Intent intent = new Intent(ACTION_CONFIG_CLICKED);
+    	//Intent intent = new Intent(context, Configuration.class);
+    	ComponentName thisWidget = new ComponentName(context, HoraireWidgetProvider.class);
+    	//TODO vérifier si la var suivante est nécessaire
+    	int[] appWidgetId = appWidgetManager.getAppWidgetIds(thisWidget);
+    	intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetId);
     	PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
     	rv.setOnClickPendingIntent(R.id.config_button, pi);
     	
@@ -224,17 +232,14 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     	
     	
     	// Update each of the widgets with the remote adapter
-        for (int i = 0; i < appWidgetIds.length; ++i) {
+        /*for (int i = 0; i < appWidgetIds.length; ++i) {
             RemoteViews layout = buildLayout(context, appWidgetIds[i], true);
             appWidgetManager.updateAppWidget(appWidgetIds[i], layout);
             
         	/*Intent intent = new Intent(context, Mainpage.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);*/
-        }
-        
-        
-        
+        //}
     }
 
     @Override
