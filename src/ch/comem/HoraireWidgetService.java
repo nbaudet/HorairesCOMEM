@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.comem;
+package ch.Comem;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -53,7 +53,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public RemoteViews getViewAt(int position) {
         // Get the data for this position from the content provider
-        String day = "Unknown Day";
+        /*String day = "Unknown Day";
         int temp = 0;
         if (mCursor.moveToPosition(position)) {
             final int dayColIndex = mCursor.getColumnIndex(HoraireDataProvider.Columns.DAY);
@@ -76,7 +76,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         fillInIntent.putExtras(extras);
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
-        return rv;
+        return rv;*/
+    	return new RemoteViews(mContext.getPackageName(), 1);
     }
     public RemoteViews getLoadingView() {
         // We aren't going to return a default loading view in this sample

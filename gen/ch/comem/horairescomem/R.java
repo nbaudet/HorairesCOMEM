@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package ch.comem.horairescomem;
+package ch.Comem.horairescomem;
 
 public final class R {
     public static final class attr {
@@ -20,24 +20,27 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
         public static final int params=0x7f020001;
         public static final int preview=0x7f020002;
-        public static final int scrollbar_vertical_thumb=0x7f020003;
-        public static final int scrollbar_vertical_track=0x7f020004;
+        public static final int rounded_edges_afternoon=0x7f020003;
+        public static final int rounded_edges_morning=0x7f020004;
+        public static final int scrollbar_vertical_thumb=0x7f020005;
+        public static final int scrollbar_vertical_track=0x7f020006;
     }
     public static final class id {
         public static final int config_button=0x7f080008;
+        public static final int courses_list=0x7f080009;
         public static final int horaire_logo=0x7f080006;
         public static final int horaire_name=0x7f080007;
         public static final int tab1=0x7f080000;
         public static final int tab2=0x7f080001;
         public static final int tab3=0x7f080002;
-        public static final int widget_item=0x7f080003;
-        public static final int widget_item1=0x7f080004;
-        public static final int widget_item2=0x7f080005;
+        public static final int widget_item=0x7f080005;
+        public static final int widget_item1=0x7f080003;
+        public static final int widget_item2=0x7f080004;
     }
     public static final class layout {
         public static final int configuration=0x7f030000;
-        public static final int display_date=0x7f030001;
-        public static final int display_timetables=0x7f030002;
+        public static final int display_courses=0x7f030001;
+        public static final int display_date=0x7f030002;
         public static final int not_used_widget_layout_small=0x7f030003;
         public static final int widget_layout=0x7f030004;
     }
@@ -66,6 +69,6 @@ public final class R {
         public static final int HoWiTheme=0x7f070001;
     }
     public static final class xml {
-        public static final int widgetinfo=0x7f040000;
+        public static final int widget_info=0x7f040000;
     }
 }

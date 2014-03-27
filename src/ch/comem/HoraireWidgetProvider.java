@@ -1,31 +1,21 @@
 /**
  * 
  */
-package ch.comem;
-
-import java.util.Random;
+package ch.Comem;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 import android.widget.Toast;
+import ch.Comem.horairescomem.R;
 
 /**
  * Notre observateur de données notifie tous les widgets quand il détecte un changement.
@@ -46,7 +36,7 @@ class HoraireDataProviderObserver extends ContentObserver {
         // In response, the factory's onDataSetChanged() will be called which will requery the
         // cursor for the new data.
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
-        		mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.horaire_list);
+        		mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.courses_list);
     }
 }
 
@@ -54,75 +44,49 @@ class HoraireDataProviderObserver extends ContentObserver {
  * The weather widget's AppWidgetProvider.
  */
 public class HoraireWidgetProvider extends AppWidgetProvider {
-    public static String CLICK_ACTION = "ch.comem.CLICK";
-    public static String REFRESH_ACTION = "ch.comem.REFRESH";
-    public static String EXTRA_DAY_ID = "ch.comem.day";
-
-    private static HandlerThread sWorkerThread;
-    private static Handler sWorkerQueue;
-    private static HoraireDataProviderObserver sDataObserver;
-    private static final int sMaxDegrees = 96;
-
-    private boolean mIsLargeLayout = true;
-    private int mHeaderHoraireState = 0;
+    public static String TAG = "HoraireWidgetProvider";
+	public static String ACTION_CONFIG_CLICKED = "ch.comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
 
     public HoraireWidgetProvider() {
-        // Start the worker thread
-        sWorkerThread = new HandlerThread("HoraireWidgetProvider-worker");
-        sWorkerThread.start();
-        sWorkerQueue = new Handler(sWorkerThread.getLooper());
-    }
-
-    // XXX: clear the worker queue if we are destroyed?
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
     	
-    	// Code qui ne fonctionne pas...
-    	final TextView txt = (TextView) findViewById(R.id.horaire_name);
-    	txt.setText("Horaire XYz");
-    	
-    	// Listener sur le bouton de configuration
-    	//addListenerConfigurationButton();
-    	Button imgBtn = (Button) findViewById(R.id.button_test);
-    	
-    	imgBtn.setOnClickListener(new OnClickListener() {
-    		@Override
-    		public void onClick(View v){
-    			Toast.makeText(getApplicationContext(), "Prout", Toast.LENGTH_SHORT).show();
-    		}
-    	});
     }
     
     /**
-     * Gestion du clic sur l'icône de configuration, permet d'ouvrir la vue Configuration.
+     * S'exécute lorsque le widget est activé (cf. cycle de vie des applications android),
+     * comme par exemple quand le service va chercher les nouveaux horaires. On doit donc
+     * écouter pour savoir quand mettre à jour les nouveaux horaires.
      */
-    public void addListenerConfigurationButton(){
-    	//ImageView imgBtn = (ImageView) findViewById(R.id.config_button);
-    	
-    }
-    
     @Override
     public void onEnabled(Context context) {
         // Register for external updates to the data to trigger an update of the widget.  When using
         // content providers, the data is often updated via a background service, or in response to
         // user interaction in the main app.  To ensure that the widget always reflects the current
         // state of the data, we must listen for changes and update ourselves accordingly.
-        final ContentResolver r = context.getContentResolver();
+        /*final ContentResolver r = context.getContentResolver();
         if (sDataObserver == null) {
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             final ComponentName cn = new ComponentName(context, HoraireWidgetProvider.class);
             sDataObserver = new HoraireDataProviderObserver(mgr, cn, sWorkerQueue);
             r.registerContentObserver(HoraireDataProvider.CONTENT_URI, true, sDataObserver);
-        }
+        }*/
     }
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
         final String action = intent.getAction();
-        if (action.equals(REFRESH_ACTION)) {
-            /*// BroadcastReceivers have a limited amount of time to do work, so for this sample, we
+        
+        Toast.makeText(ctx, "Horaire Widget dans onReceive", Toast.LENGTH_SHORT).show();
+        
+        // Réception du click sur le bouton de configuration
+        Log.d(TAG, "onReceive() " + intent.getAction());
+        
+        if (ACTION_CONFIG_CLICKED.equals(action)){
+	        // Ouverture de l'activity de configuration
+        	Toast.makeText(ctx, "Horaire Widget : Config cliqué !", Toast.LENGTH_SHORT).show();
+	    }
+        
+        /*if (action.equals(REFRESH_ACTION)) {
+            // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
             // are triggering an update of the data on another thread.  In practice, this update
             // can be triggered from a background service, or perhaps as a result of user actions
             // inside the main application.
@@ -155,13 +119,13 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             });
 
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);*/
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
         } else if (action.equals(CLICK_ACTION)) {
             // Show a toast
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             Toast.makeText(ctx, "prout", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         super.onReceive(ctx, intent);
     }
@@ -174,7 +138,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
      * @return
      */
     private RemoteViews buildLayout(Context context, int appWidgetId, boolean largeLayout) {
-        RemoteViews rv;
+        /*RemoteViews rv;
         if (largeLayout) {
             // Specify the service to provide data for the collection widget.  Note that we need to
             // embed the appWidgetId via the data otherwise it will be ignored.
@@ -224,17 +188,30 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             }
             c.close();
         }
-        return rv;
+        return rv;*/
+        return new RemoteViews(context.getPackageName(), R.layout.widget_layout);
     }
 
+    /**
+     * Permet l'affichage de l'interface, et est appelée lors des rafraîchissements commandés par le gestionnaire de bureau.  
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
     	
+    	// Intent lors du clic sur le bouton de configuration
+    	Intent intent = new Intent(ACTION_CONFIG_CLICKED);
+    	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+    	RemoteViews layout_test = buildLayout(context, appWidgetIds[0], true);
+    	layout_test.setOnClickPendingIntent(R.id.config_button, pendingIntent);
+    	
+    	Log.v(TAG, "Dans onUpdate");
+    	Toast.makeText(context, "Horaire Widget dans onUpdate", Toast.LENGTH_SHORT).show();
+    	
     	// Update each of the widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
-            RemoteViews layout = buildLayout(context, appWidgetIds[i], mIsLargeLayout);
+            RemoteViews layout = buildLayout(context, appWidgetIds[i], true);
             appWidgetManager.updateAppWidget(appWidgetIds[i], layout);
             
         	/*Intent intent = new Intent(context, Mainpage.class);
@@ -248,18 +225,13 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId, Bundle newOptions) {
 
-        /*int minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-        int maxWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
-        int minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-        int maxHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);*/
-
         RemoteViews layout;
-        if (minHeight < 100) {
+        /*if (minHeight < 100) {
             mIsLargeLayout = false;
         } else {
             mIsLargeLayout = true;
-        }
-        layout = buildLayout(context, appWidgetId, mIsLargeLayout);
+        }*/
+        layout = buildLayout(context, appWidgetId, true);
         appWidgetManager.updateAppWidget(appWidgetId, layout);
     }
 }

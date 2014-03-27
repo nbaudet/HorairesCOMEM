@@ -1,7 +1,7 @@
 ﻿/**
  * 
  */
-package ch;
+package ch.Comem;
 
 import java.util.ArrayList;
 

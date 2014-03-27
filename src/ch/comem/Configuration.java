@@ -1,5 +1,6 @@
-package ch.comem;
+package ch.Comem;
 
+import ch.Comem.horairescomem.R;
 import android.app.Activity;
 import android.os.Bundle;
 

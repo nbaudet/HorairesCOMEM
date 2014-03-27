@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.comem.horairescomem"
+    package="ch.Comem.horairescomem"
     android:versionCode="1"
     android:versionName="0.1 Beta"
     android:installLocation="internalOnly" >
@@ -15,39 +15,46 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/HoWiBaseTheme">
         
-        <!-- <activity android:label="@string/app_name"
+<!--         <intent-filter> -->
+<!--             <action android:name="ch.Comem.HoraireWidgetProvider.ACTION_CONFIG_CLICKED"/> -->
+<!--         </intent-filter> -->
+        
+        <!-- Déclaration de l'activité de configuration du widget -->
+        <activity android:label="@string/app_name"
             android:name=".Configuration" >
-        </activity>-->
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         
         <!-- Une balise receiver permet d'indiquer un récepteur de diffusion
         qui s'exécutera à chaque fois qu'une intention correspondante sera
         diffusée par le système ou une application.
-        Permet de donner les informations concernant l'horaire à la vue -->
-        <receiver android:name="ch.comem.HoraireWidgetProvider">
+        Permet aussi de spécifier au système que cette app est un widget -->
+        <receiver android:name="ch.Comem.HoraireWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <!-- This specifies the widget provider info -->
             <meta-data android:name="android.appwidget.provider"
-                    android:resource="@xml/widgetinfo" />
+                    android:resource="@xml/widget_info" />
         </receiver>
 
         <!-- Le service qui fournit les nouveaux horaires à intervalles réguliers -->
-        <service android:name="ch.comem.HoraireWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+<!--         <service android:name="ch.Comem.HoraireWidgetService" -->
+<!--             android:permission="android.permission.BIND_REMOTEVIEWS" -->
+<!--             android:exported="false" /> -->
 
         <!-- Une balise provider permet d'indiquer les fournisseurs de contenu de
         notre application.
         Permet de donner le contenu des horaires -->
-        <provider android:name="ch.comem.HoraireDataProvider"
-              android:authorities="ch.comem.horairelistwidget.provider" />
+<!--         <provider android:name="ch.Comem.HoraireDataProvider" -->
+<!--               android:authorities="ch.Comem.horairelistwidget.provider" /> -->
         
-        <activity android:name=".Configuration" >
-            <intent-filter>
-                <action android:name="android.apwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+<!--         <activity android:name=".Configuration" > -->
+<!--             <intent-filter> -->
+<!--                 <action android:name="android.apwidget.action.ACTION_CONFIG_CLICKED" /> -->
+<!--             </intent-filter> -->
+<!--         </activity> -->
         
     </application>
 
