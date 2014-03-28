@@ -11,5 +11,5 @@
 	android:minResizeWidth="280dp"
 	android:minResizeHeight="70dp"
 	android:previewImage="@drawable/preview"
-	android:configure="ch.Comem.HorairesCOMEM.Configuration" >
+	android:configure="ch.Comem.Configuration" >
 </appwidget-provider>

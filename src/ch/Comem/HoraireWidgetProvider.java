@@ -215,12 +215,12 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     	RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
     	
     	// Écouteur de clic sur le bouton de configuration
-    	Intent intent = new Intent(ACTION_CONFIG_CLICKED);
-    	//Intent intent = new Intent(context, Configuration.class);
-    	ComponentName thisWidget = new ComponentName(context, HoraireWidgetProvider.class);
-    	//TODO vérifier si la var suivante est nécessaire
-    	int[] appWidgetId = appWidgetManager.getAppWidgetIds(thisWidget);
-    	intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetId);
+    	//Intent intent = new Intent(ACTION_CONFIG_CLICKED);
+    	Intent intent = new Intent(context, Configuration.class);
+    	ComponentName thisWidget = new ComponentName(context, Configuration.class);
+
+    	intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetIds);
+    	
     	PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
     	rv.setOnClickPendingIntent(R.id.config_button, pi);
     	

@@ -16,7 +16,7 @@
         android:theme="@style/HoWiBaseTheme">
         
         <!-- Déclaration de l'activité de configuration du widget -->
-        <activity android:name=".Configuration" >
+        <activity android:name="ch.Comem.Configuration" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
