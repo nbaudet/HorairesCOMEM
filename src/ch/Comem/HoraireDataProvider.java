@@ -110,6 +110,7 @@ public class HoraireDataProvider extends ContentProvider {
         // Notify any listeners that the data backing the content provider has changed, and return
         // the number of rows affected.
         getContext().getContentResolver().notifyChange(uri, null);
+        c.close();
         return 1;
     }
 }

@@ -7,10 +7,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 /**
  * This is the service that provides the factory to be bound to the collection service.

@@ -41,13 +41,13 @@ class HoraireDataProviderObserver extends ContentObserver {
 }
 
 /**
- * The weather widget's AppWidgetProvider.
+ * La classe qui fournit le widget.
  */
 public class HoraireWidgetProvider extends AppWidgetProvider {
     
 	public static String TAG = "HoraireWidgetProvider";
-	public static String ACTION_CONFIG_CLICKED = "ch.Comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
-	public static String FORCE_WIDGET_UPDATE = "ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE";
+	//public static String ACTION_CONFIG_CLICKED = "ch.Comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
+	//public static String FORCE_WIDGET_UPDATE = "ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE";
 	public static String EXTRA_APPWIDGET_ID;
 
     public HoraireWidgetProvider() {
@@ -66,7 +66,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         // user interaction in the main app.  To ensure that the widget always reflects the current
         // state of the data, we must listen for changes and update ourselves accordingly.
         /*final ContentResolver r = context.getContentResolver();
-        if (sDataObserver == null) {
+		if (sDataObserver == null) {
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             final ComponentName cn = new ComponentName(context, HoraireWidgetProvider.class);
             sDataObserver = new HoraireDataProviderObserver(mgr, cn, sWorkerQueue);
@@ -83,7 +83,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         // Réception du click sur le bouton de configuration
         Log.d(TAG, "onReceive() " + action);
         
-        if (ACTION_CONFIG_CLICKED.equals(action)){
+        /*if (ACTION_CONFIG_CLICKED.equals(action)){
 	        // Ouverture de l'activity de configuration
         	Toast.makeText(ctx, "Horaire Widget : Config cliqué !", Toast.LENGTH_SHORT).show();
 	    }
@@ -93,6 +93,9 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         	// TODO: mettre à jour le widget
         	// On peut le lancer comme suit : sendBroadcast(new Intent(HoraireWidgetProvider .FORCE_WIDGET_UPDATE));
         }
+        else{
+        	//Toast.makeText(ctx, "onReceive else", Toast.LENGTH_SHORT).show();
+        }*/
         
         /*if (action.equals(REFRESH_ACTION)) {
             // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
@@ -130,13 +133,15 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         } else if (action.equals(CLICK_ACTION)) {
-            // Show a toast
             final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            Toast.makeText(ctx, "prout", Toast.LENGTH_SHORT).show();
         }*/
 
-        super.onReceive(ctx, intent);
+        /*final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
+        Toast.makeText(ctx, Integer.toString(appWidgetId), Toast.LENGTH_SHORT).show();*/
+        
+    	super.onReceive(ctx, intent);
     }
 
     /**
@@ -147,6 +152,9 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
      * @return
      */
     private RemoteViews buildLayout(Context context, int appWidgetId, boolean largeLayout) {
+    	
+    	Toast.makeText(context, "HoWi:buildLayout", Toast.LENGTH_SHORT).show();
+    	
         /*RemoteViews rv;
         if (largeLayout) {
             // Specify the service to provide data for the collection widget.  Note that we need to
@@ -202,50 +210,47 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     }
 
     /**
-     * Permet l'affichage de l'interface, et est appelée lors des rafraîchissements commandés par le gestionnaire de bureau.  
+     * Permet l'affichage de l'interface, et est appelée lors des rafraîchissements commandés
+     * par le gestionnaire de bureau.  
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        
-    	Toast.makeText(context, "HoWi:onUpdate", Toast.LENGTH_SHORT).show();
     	
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
+    	
+    	Toast.makeText(context, "HoWi:onUpdate", Toast.LENGTH_SHORT).show();
     	
     	// Récupération de la vue distante
     	RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
     	
-    	// Écouteur de clic sur le bouton de configuration
-    	//Intent intent = new Intent(ACTION_CONFIG_CLICKED);
-    	Intent intent = new Intent(context, Configuration.class);
-    	ComponentName thisWidget = new ComponentName(context, Configuration.class);
+    	
+    	
+    	// Configuration de l'interface de chaque widget
+    	for (int i = 0; i < appWidgetIds.length; ++i) {
+    		
+    		Intent intent = new Intent(context, Configuration.class);
 
-    	intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetIds);
-    	
-    	PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
-    	rv.setOnClickPendingIntent(R.id.config_button, pi);
-    	
-    	// Changement d'un titre
-    	rv.setTextViewText(R.id.horaire_name, "MIT40");
-    	
-    	// Cet appel permet de mettre à jour les widgets    	
-    	appWidgetManager.updateAppWidget(appWidgetIds, rv);
-    	
-    	
-    	// Update each of the widgets with the remote adapter
-        /*for (int i = 0; i < appWidgetIds.length; ++i) {
-            RemoteViews layout = buildLayout(context, appWidgetIds[i], true);
-            appWidgetManager.updateAppWidget(appWidgetIds[i], layout);
-            
-        	/*Intent intent = new Intent(context, Mainpage.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);*/
-        //}
+    		int appWidgetId = appWidgetIds[i];
+    		//Toast.makeText(context, Integer.toString(appWidgetId), Toast.LENGTH_SHORT).show();
+        	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+    		
+        	rv.setTextViewText(R.id.horaire_name, "Widget n° " + Integer.toString(appWidgetId));
+        	
+        	// <3 http://stackoverflow.com/questions/4011178/multiple-instances-of-widget-only-updating-last-widget
+        	PendingIntent pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);;
+        	rv.setOnClickPendingIntent(R.id.config_button, pi);
+        	
+        	// Mise à jour du widget courant
+	        appWidgetManager.updateAppWidget(appWidgetId, rv);
+    	}
     }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId, Bundle newOptions) {
 
+    	Toast.makeText(context, "HoWi:onAppWidgetOptionsChanged", Toast.LENGTH_SHORT).show();
+    	
         RemoteViews layout;
         /*if (minHeight < 100) {
             mIsLargeLayout = false;

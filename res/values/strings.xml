@@ -1,11 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- String généraux -->
     <string name="app_name">Horaires COMEM</string>
-    <string name="horaire_name">Horaire XY</string>
     <string name="empty_view_text">Configurez votre horaire en cliquant sur l\'icône en haut à droite.</string>
-    <string name="logo_description">Logo de l\'application</string>
+    <string name="logo_description">Logo de Horaire Widget</string>
+    <string name="horaire_name"></string>
+    
+    <!-- Configuration -->
+    <string name="config_title">Configuration du widget</string>
     <string name="config_button_description">Icône des paramètres</string>
+    <string name="class_choice">Choisir la classe</string>
+    
+    <!-- Dialogue "A propos" -->
     <string name="action_about">A propos</string>
-    <string name="scroll_text">blabla</string>
+    <string name="title_about">A propos de ce Widget</string>
+    <string name="dialog_about"><b>Horaire COMEM</b>\n\n
+<i>Version</i> : 1.0\n
+<i>Auteur</i> : Nicolas Baudet\n
+<i>Prof. responsable</i> : Jean-Pierre Hess\n
+<i>Etablissement</i> : HEIG-VD,\n
+Yverdon-les-Bains, Suisse\n
+<i>Licence</i> : GNU GPL v3\n\n
+Plus d\'informations sur\n
+www.baudet.me</string>
+	<string name="close_button">Fermer</string>
 
 </resources>

@@ -9,18 +9,13 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    
     <application
         android:label="@string/app_name"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/HoWiBaseTheme">
-        
-        <!-- Déclaration de l'activité de configuration du widget -->
-        <activity android:name="ch.Comem.Configuration" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
         
         <!-- Une balise receiver permet d'indiquer un récepteur de diffusion
         qui s'exécutera à chaque fois qu'une intention correspondante sera
@@ -30,12 +25,24 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                    android:resource="@xml/widget_info" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
         </receiver>
+        
+        <!-- Ceci va juste au dessus, si besoin -->
+        <!--             <intent-filter> -->
+<!--                 <action android:name="ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE" /> -->
+<!--             </intent-filter> -->
+        
+        
+        <!-- Déclaration de l'activité de configuration du widget -->
+        <activity android:name="ch.Comem.Configuration" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        
 
         <!-- Le service qui fournit les nouveaux horaires à intervalles réguliers -->
 <!--         <service android:name="ch.Comem.HoraireWidgetService" -->
@@ -47,12 +54,6 @@
         Permet de donner le contenu des horaires -->
 <!--         <provider android:name="ch.Comem.HoraireDataProvider" -->
 <!--               android:authorities="ch.Comem.horairelistwidget.provider" /> -->
-        
-<!--         <activity android:name=".Configuration" > -->
-<!--             <intent-filter> -->
-<!--                 <action android:name="android.apwidget.action.ACTION_CONFIG_CLICKED" /> -->
-<!--             </intent-filter> -->
-<!--         </activity> -->
         
     </application>
 
