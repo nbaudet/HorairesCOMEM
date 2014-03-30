@@ -11,44 +11,102 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 /**
- * This is the service that provides the factory to be bound to the collection service.
+ * Ce service de vues distantes est utilisé comme une enveloppe et permet d'instancier et de
+ * gérer une RemoteViewsFactory qui, à son tour, sert à fournir chacune des vues affichées
+ * dans le widget collection.
  */
 public class HoraireWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new HoraireRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 }
 
 /**
- * This is the factory that will provide data to the collection widget.
+ * La Factory qui va créer et remplir les vues dans les widget collection.
  */
-class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private Context mContext;
-    private Cursor mCursor;
-    private int mAppWidgetId;
+class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    private Context context;
+    private Intent intent;
+    private Cursor cursor;
+    private int appWidgetId;
 
-    public StackRemoteViewsFactory(Context context, Intent intent) {
-        mContext = context;
-        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+    /**
+     * Implémentation facultative d'un constructeur, mais utile pour récupérer
+     * les références au contexte du widget appelant.
+     * @param context
+     * @param intent
+     */
+    public HoraireRemoteViewsFactory(Context context, Intent intent) {
+        this.context = context;
+        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
+    /**
+     * Configure les connexions/curseurs vers les sources de données.
+     * Si cet appel dure plus de 20 secondes, un ANR interviendra !
+     */
     public void onCreate() {
         // Since we reload the cursor in onDataSetChanged() which gets called immediately after
         // onCreate(), we do nothing here.
     }
-
-    public void onDestroy() {
-        if (mCursor != null) {
-            mCursor.close();
+    
+    /**
+     * Appelée lorsque la collection de données sous-jacente affichée est modifiée.
+     * (On peut utiliser la méthode notifyAppWidgetViewDataChanged de
+     * l'AppWidgetManager pour déclencher ce gestionnaire.)
+     */
+    public void onDataSetChanged() {
+        // Refresh the cursor
+        if (cursor != null) {
+            cursor.close();
         }
+        cursor = context.getContentResolver().query(HoraireDataProvider.CONTENT_URI, null, null,
+                null, null);
     }
-
+    
+    /**
+     * Renvoie le nombre d'éléments de la collection affichée.
+     */
     public int getCount() {
-        return mCursor.getCount();
+        return cursor.getCount();
     }
 
+    /**
+     * Renvoie true si les identifiants uniques fournis par chaque élément
+     * sont stables - càd s'ils ne changent pas à l'exécution.
+     */
+    public boolean hasStableIds() {
+        return false;
+    }
+    
+    /**
+     * Renvoie l'identifiant unique associé à l'élément d'indice indiqué.
+     */
+    public long getItemId(int position) {
+        return position;
+    }
+    
+    /**
+     * Nombre de définitions de vues différentes.
+     */
+    public int getViewTypeCount() {
+        // Je pense qu'il n'y en a qu'une...
+        return 1;
+    }
+    
+    /**
+     * Fournit éventuellement une vue de chargement à afficher.
+     * Renvoyer null permet d'utiliser la vue par défaut.
+     */
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    /**
+     * Crée et remplit la vue à afficher à l'index indiqué.
+     */
     public RemoteViews getViewAt(int position) {
         // Get the data for this position from the content provider
         /*String day = "Unknown Day";
@@ -75,32 +133,16 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
         return rv;*/
-    	return new RemoteViews(mContext.getPackageName(), 1);
+    	return new RemoteViews(context.getPackageName(), 1);
     }
-    public RemoteViews getLoadingView() {
-        // We aren't going to return a default loading view in this sample
-        return null;
-    }
-
-    public int getViewTypeCount() {
-        // Technically, we have two types of views (the dark and light background views)
-        return 2;
-    }
-
-    public long getItemId(int position) {
-        return position;
-    }
-
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    public void onDataSetChanged() {
-        // Refresh the cursor
-        if (mCursor != null) {
-            mCursor.close();
+    
+    /**
+     * Ferme les connexions, les curseurs ou tout autre état persistant
+     * créé dans onCreate.
+     */
+    public void onDestroy() {
+        if (cursor != null) {
+            cursor.close();
         }
-        mCursor = mContext.getContentResolver().query(HoraireDataProvider.CONTENT_URI, null, null,
-                null, null);
     }
 }

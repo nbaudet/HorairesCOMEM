@@ -98,6 +98,23 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 			
 	}
 	
+	/**
+	 * Ces deux fonctions permettent de récupérer les valeurs sélectionnées précédemment
+	 * quand on quitte ou qu'on tourne l'écran, et les ré-affiche au lieu de tout réinitialiser.
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		// TODO Enregistrer les valeurs
+		//P. ex. : savedInstanceState.putString("MyString", "Welcome back to Android");
+	}
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// TODO Récupérer les valeurs
+		//P. ex. : String myString = savedInstanceState.getString("MyString");
+	}
+	
 	/*********************************************************************
 	 * Accesseurs aux objets du webservice
 	 ********************************************************************/
