@@ -11,7 +11,8 @@
     <string name="selection_title">Configuration du widget</string>
     <string name="config_button_description">Icône des paramètres</string>
     <string name="config_explanation_normal"><b>Mode Normal : </b>Choisissez une classe ET/OU un prof et cliquez sur OK</string>
-	<string name="config_explanation_advanced"><b>Mode de planification : </b>Choisissez les trois à la fois pour voir apparaître un aperçu de l\'horaire de l\'année.</string>
+	<string name="config_explanation_advanced"><b>Mode de planification : </b>Choisissez une classe, un intervenant ET un cours pour voir apparaître un aperçu de l\'horaire de l\'année.</string>
+	<string name="config_explanation_update_freq"><b>Fréquence de mise à jour : </b>Le widget se met automatiquement à jour toutes les 24 heures.</string>
     <string name="class_choice">Choisir une classe</string>
     <string name="teacher_choice">Choisir un intervenant</string>
     <string name="course_choice">Choisir un cours</string>

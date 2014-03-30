@@ -35,6 +35,13 @@
 	        android:layout_marginBottom="10dp"
 	        android:text="@string/config_explanation_advanced"
 	        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	        android:text="@string/config_explanation_update_freq"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
 	    
 	    <View
 		    android:layout_width="fill_parent"
@@ -110,6 +117,13 @@
 	        android:text="@string/number_of_days_choice"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	        android:text="@string/warning_number_of_days"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+
 	    <Spinner
 	        android:id="@+id/spinner_number_of_days"
 	        android:layout_width="match_parent"
@@ -117,12 +131,6 @@
 	        android:layout_marginBottom="20dp"
 	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp" />
-
-	    <TextView
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/warning_number_of_days"
-	        android:textAppearance="?android:attr/textAppearanceSmall" />
     
 	        <LinearLayout
 		        android:layout_width="fill_parent"

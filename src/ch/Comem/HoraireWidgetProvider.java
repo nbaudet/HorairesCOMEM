@@ -6,13 +6,9 @@ package ch.Comem;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import ch.Comem.HorairesCOMEM.R;
@@ -20,7 +16,7 @@ import ch.Comem.HorairesCOMEM.R;
 /**
  * Notre observateur de données notifie tous les widgets quand il détecte un changement.
  */
-class HoraireDataProviderObserver extends ContentObserver {
+/*class HoraireDataProviderObserver extends ContentObserver {
     private AppWidgetManager mAppWidgetManager;
     private ComponentName mComponentName;
 
@@ -38,7 +34,7 @@ class HoraireDataProviderObserver extends ContentObserver {
         mAppWidgetManager.notifyAppWidgetViewDataChanged(
         		mAppWidgetManager.getAppWidgetIds(mComponentName), R.id.courses_list);
     }
-}
+}*/
 
 /**
  * La classe qui fournit le widget.
@@ -46,13 +42,9 @@ class HoraireDataProviderObserver extends ContentObserver {
 public class HoraireWidgetProvider extends AppWidgetProvider {
     
 	public static String TAG = "HoraireWidgetProvider";
-	//public static String ACTION_CONFIG_CLICKED = "ch.Comem.CONFIG_CLICKED"; // Permet la gestion des Button et des Intent dans un widget
-	//public static String FORCE_WIDGET_UPDATE = "ch.Comem.HorairesCOMEM.FORCE_WIDGET_UPDATE";
 	public static String EXTRA_APPWIDGET_ID;
 
-    public HoraireWidgetProvider() {
-    	
-    }
+    //public HoraireWidgetProvider() {}
     
     /**
      * S'exécute lorsque le widget est activé (cf. cycle de vie des applications android),
@@ -258,7 +250,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         } else {
             mIsLargeLayout = true;
         }*/
-        layout = buildLayout(context, appWidgetId, true);
-        appWidgetManager.updateAppWidget(appWidgetId, layout);
+        //layout = buildLayout(context, appWidgetId, true);
+        //appWidgetManager.updateAppWidget(appWidgetId, layout);
     }
 }

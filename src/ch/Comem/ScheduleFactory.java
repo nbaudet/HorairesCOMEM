@@ -14,9 +14,6 @@ import com.Wsdl2Code.WebServices.Service.VectorIntervenant;
 public class ScheduleFactory {
 
 	private ArrayList<String> classes, cours, intervenants, modules;
-	/*private ArrayList<Cours> cours;
-	private ArrayList<Intervenant> intervenants;
-	private ArrayList<Module> modules;*/
 	private ArrayList<ScheduleEntity> horaires;
 	
 	public ScheduleFactory(Object data) {
