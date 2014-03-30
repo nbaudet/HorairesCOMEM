@@ -67,4 +67,8 @@ public class Cours implements KvmSerializable {
     public void setProperty(int arg0, Object arg1) {
     }
     
+    public String toString(){
+    	return this.id;
+    }
+    
 }

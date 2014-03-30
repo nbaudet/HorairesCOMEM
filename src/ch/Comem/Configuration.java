@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.util.Log;
@@ -13,17 +14,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import ch.Comem.HorairesCOMEM.R;
 
 import com.Wsdl2Code.WebServices.Service.IWsdl2CodeEvents;
+import com.Wsdl2Code.WebServices.Service.RequestEntity;
 import com.Wsdl2Code.WebServices.Service.Service;
 
 public class Configuration extends Activity implements IWsdl2CodeEvents {
 
 	private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+	
+	private Service service;
+	private RequestEntity req;
+	private ScheduleFactory sf = null;
 	
 	/**
 	 * Fonction appelée lorsque l'activité est créée pour la première fois.
@@ -38,21 +46,37 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		// Définition de la vue à utiliser
 		setContentView(R.layout.configuration);
 		
+		// Met le résultat à annulé si l'utilisateur quitte l'activité sans valider les modifs de la config
+		setResult(RESULT_CANCELED, null);
+		
+		// Attaque du webservice pour remplir les champs
+		if(this.sf == null){
+			Toast.makeText(getApplicationContext(), R.string.wait, Toast.LENGTH_SHORT).show();
+			new AsyncTask<Void, Void, Void>() {
+		    	@Override
+		    	protected Void doInBackground(Void... params) {
+		    		callWebService();
+					return null;
+		    	}
+			}.execute();
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "SF déjà setté.", Toast.LENGTH_SHORT).show();
+		}
+		
+		// Récupération de l'id du widget
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
 		if(extras != null) {
-			appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			Toast.makeText(getApplicationContext(), "Widget ID : " + appWidgetId, Toast.LENGTH_SHORT).show();
+			this.appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			//Toast.makeText(getApplicationContext(), "Widget ID : " + appWidgetId, Toast.LENGTH_SHORT).show();
 		}
 		else {
 			Toast.makeText(getApplicationContext(), "Pas d'id en extra !", Toast.LENGTH_LONG).show();
 		}
 		
-		// Met le résultat à annulé si l'utilisateur quitte l'activité sans valider les modifs de la config
-		setResult(RESULT_CANCELED, null);
-		
 		// TODO configuration de l'interface utilisateur
-		setClasses();
+		//setClasses();
 		
 		// Gestion du clic sur les bouton
 		Button ok_btn = (Button) findViewById(R.id.ok_button);
@@ -74,11 +98,41 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 			
 	}
 	
-	/**
-	 * Remplit le sélecteur de classes en faisant appel au webservice
-	 */
-	private void setClasses() {
-		//callWebService();
+	/*********************************************************************
+	 * Accesseurs aux objets du webservice
+	 ********************************************************************/
+	public void setScheduleInfo(String methodName, Object Data) {
+		
+		this.sf = new ScheduleFactory(Data);
+		
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_class);
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sf.getClasses());
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    spinner = (Spinner) findViewById(R.id.spinner_teacher);
+		adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sf.getTeachers());
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    spinner = (Spinner) findViewById(R.id.spinner_course);
+		adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sf.getCourses());
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    // Couleurs
+	    spinner = (Spinner) findViewById(R.id.spinner_color);
+		adapter = ArrayAdapter.createFromResource(this, R.array.spinner_color, android.R.layout.simple_spinner_item);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    // Nombre de jours
+	    spinner = (Spinner) findViewById(R.id.spinner_number_of_days);
+		adapter = ArrayAdapter.createFromResource(this, R.array.spinner_number_of_days, android.R.layout.simple_spinner_item);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    // TODO Récupérer les préférences de ce widget et les afficher dans les spinners
 	}
 	
 	
@@ -91,6 +145,10 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		// Prévient le gestionnaire de widgets que la config est terminée et lui passe l'id du widget à modifier
 		Intent result = new Intent();
 		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		
+		//TODO Ajouter les préférences au widget et chercher les horaires voulus
+		
+		
 		setResult(RESULT_OK, result);
 		finish();
 	}
@@ -103,20 +161,22 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	 */
 	public void callWebService(){
 		
-		Service s = new Service(this);
+		this.service = new Service(this);
 		
 		try {
-			s.GetScheduleInfoAsync();
+			this.service.GetScheduleInfoAsync();
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			displayError();
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
 	public void Wsdl2CodeStartedRequest() {
 		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeStartedRequest");
+		//Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " est en train d'attaquer le webservice.", Toast.LENGTH_SHORT).show();
 	}
 	
 	/**
@@ -126,7 +186,8 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	public void Wsdl2CodeFinished(String methodName, Object Data) {
 		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished");
 		Log.e(HoraireWidgetProvider.TAG, methodName);
-		
+		setScheduleInfo(methodName, Data);
+		//Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " a reçu les infos du webservice.", Toast.LENGTH_SHORT).show();
 	}
 	
 	/**
@@ -136,11 +197,18 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	@Override
 	public void Wsdl2CodeFinishedWithException(Exception ex) {
 		Log.e(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException");
-		Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " n'a pas réussi à contacter le webservice.", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
 	}
 	@Override
 	public void Wsdl2CodeEndedRequest() {
 		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest");
+	}
+	
+	/**
+	 * Fonction s'appelant lorsque l'attaque du webservice a échoué
+	 */
+	public void displayError(){
+		Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
 	}
 	
 	/*********************************************************************

@@ -28,7 +28,7 @@ import org.ksoap2.serialization.MarshalFloat;
 public class Service {
     
     public String NAMESPACE ="http://heig-vd.ch/Schemas/ComemSchedule/";
-    public String url="";
+    public String url="http://services.heig-vd.ch/ComemSchedule/Service.asmx";
     public int timeOut = 60000;
     public IWsdl2CodeEvents eventHandler;
     public SoapProtocolVersion soapVersion;

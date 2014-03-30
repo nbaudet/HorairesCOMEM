@@ -7,14 +7,35 @@
     <string name="horaire_name"></string>
     
     <!-- Configuration -->
-    <string name="config_title">Configuration du widget</string>
+    <string name="config_title">Aide</string>
+    <string name="selection_title">Configuration du widget</string>
     <string name="config_button_description">Icône des paramètres</string>
-    <string name="class_choice">Choisir la classe</string>
+    <string name="config_explanation_normal"><b>Mode Normal : </b>Choisissez une classe ET/OU un prof et cliquez sur OK</string>
+	<string name="config_explanation_advanced"><b>Mode de planification : </b>Choisissez les trois à la fois pour voir apparaître un aperçu de l\'horaire de l\'année.</string>
+    <string name="class_choice">Choisir une classe</string>
+    <string name="teacher_choice">Choisir un intervenant</string>
+    <string name="course_choice">Choisir un cours</string>
+    <string name="color_choice">Couleur d\'affichage</string>
+    <string-array name="spinner_color">
+        <item>Bleu</item>
+        <item>Rouge</item>
+        <item>Vert</item>
+        <item>Jaune</item>
+    </string-array>
+    <string name="number_of_days_choice">Nombre de jours</string>
+    <string name="warning_number_of_days">Utilisé uniquement en <b>Mode Normal</b>.</string>
+    <string-array name="spinner_number_of_days">
+        <item>1 semaine</item>
+        <item>1 mois</item>
+        <item>2 mois</item>
+    </string-array>
+    <string name="wait">Veuillez patienter&#8230;</string>
+    <string name="error">Erreur de réseau. Veuillez réessayer plus tard.</string>
     
     <!-- Dialogue "A propos" -->
     <string name="action_about">A propos</string>
     <string name="title_about">A propos de ce Widget</string>
-    <string name="dialog_about"><b>Horaire COMEM</b>\n\n
+    <string name="dialog_about">\n<b>Horaire COMEM</b>\n\n
 <i>Version</i> : 1.0\n
 <i>Auteur</i> : Nicolas Baudet\n
 <i>Prof. responsable</i> : Jean-Pierre Hess\n
@@ -22,7 +43,7 @@
 Yverdon-les-Bains, Suisse\n
 <i>Licence</i> : GNU GPL v3\n\n
 Plus d\'informations sur\n
-www.baudet.me</string>
+www.baudet.me\n</string>
 	<string name="close_button">Fermer</string>
 
 </resources>

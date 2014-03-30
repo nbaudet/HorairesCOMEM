@@ -78,10 +78,11 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context ctx, Intent intent) {
         final String action = intent.getAction();
         
-        Toast.makeText(ctx, "HoWi:onReceive, TAG : " + action, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ctx, "HoWi:onReceive, TAG : " + action, Toast.LENGTH_SHORT).show();
+        //Log.d(TAG, "onReceive() " + action);
         
         // Réception du click sur le bouton de configuration
-        Log.d(TAG, "onReceive() " + action);
+        
         
         /*if (ACTION_CONFIG_CLICKED.equals(action)){
 	        // Ouverture de l'activity de configuration
@@ -218,7 +219,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     	
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
     	
-    	Toast.makeText(context, "HoWi:onUpdate", Toast.LENGTH_SHORT).show();
+    	//Toast.makeText(context, "HoWi:onUpdate", Toast.LENGTH_SHORT).show();
     	
     	// Récupération de la vue distante
     	RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
