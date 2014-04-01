@@ -220,4 +220,11 @@ public class ScheduleEntity implements KvmSerializable {
     public void setProperty(int arg0, Object arg1) {
     }
     
+    public String toString(){
+    	StringBuilder sb = new StringBuilder(200);
+    	sb.append("<b>"+this.courseId+"</b> - ");
+    	sb.append(this.teacherId + "\n");
+    	sb.append(this.room);
+    	return sb.toString();
+    }
 }

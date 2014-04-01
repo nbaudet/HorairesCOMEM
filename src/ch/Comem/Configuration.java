@@ -3,6 +3,7 @@ package ch.Comem;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,7 +36,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	
 	private Service service;
 	private RequestEntity req;
-	private ScheduleFactory sf = null;
+	private ScheduleInfoFactory sf = null;
 	
 	// Stockage des préférences
 	SharedPreferences prefs;
@@ -69,7 +70,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		
 		// Attaque du webservice pour remplir les champs
 		if(this.sf == null){
-			Toast.makeText(getApplicationContext(), R.string.wait, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), R.string.wait, Toast.LENGTH_LONG).show();
 			new AsyncTask<Void, Void, Void>() {
 		    	@Override
 		    	protected Void doInBackground(Void... params) {
@@ -131,12 +132,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		int pos;
 		Context context = getApplicationContext();
 		
-		//String selectedClass = prefs.getString(PREF_CLASS, "Classe");
 		String selectedClass = getPref(context, PREF_CLASS);
-		/*String selectedCourse = prefs.getString(PREF_COURSE, "Cours");
-		String selectedTeacher = prefs.getString(PREF_TEACHER, "Intervenants");
-		String selectedColor = prefs.getString(PREF_COLOR, "Bleu");
-		String selectedNumDays = prefs.getString(PREF_TIME, "1 semaine");*/
 		String selectedCourse = getPref(context, PREF_COURSE);
 		String selectedTeacher = getPref(context, PREF_TEACHER);
 		String selectedColor = getPref(context, PREF_COLOR);
@@ -168,7 +164,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	 * Ces deux fonctions permettent de récupérer les valeurs sélectionnées précédemment
 	 * quand on quitte ou qu'on tourne l'écran, et les ré-affiche au lieu de tout réinitialiser.
 	 */
-	@Override
+	/*@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		// TODO Enregistrer les valeurs
@@ -179,7 +175,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		super.onRestoreInstanceState(savedInstanceState);
 		// TODO Récupérer les valeurs
 		//P. ex. : String myString = savedInstanceState.getString("MyString");
-	}
+	}*/
 	
 	/*********************************************************************
 	 * Accesseurs aux objets du webservice
@@ -187,7 +183,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setScheduleInfo(String methodName, Object Data) {
 		
-		this.sf = new ScheduleFactory(Data);
+		this.sf = new ScheduleInfoFactory(Data);
 		
 		// Classes
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sf.getClasses());
@@ -231,14 +227,11 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	
 	
 	/**
-	 * Actions à exécuter quand la config est terminée
-	 * @param appWidgetId
+	 * Enregistre les préférences pour ce widget, prévient le gestionnaire de widgets
+	 * que la config est terminée et lui passe l'id du widget à modifier.
+	 * @param appWidgetId L'id du widget courant à modifier
 	 */
 	private void completedConfiguration(int appWidgetId) {
-		// Sauve la config pour appWidgetId
-		// Prévient le gestionnaire de widgets que la config est terminée et lui passe l'id du widget à modifier
-		Intent result = new Intent();
-		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		Context context = getApplicationContext();
 		
 		String selectedClass   = this.spinnerClasses.getSelectedItem().toString();
@@ -268,6 +261,19 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		edit.commit();
 		
 		//TODO spécifier le widget à updater avec ces préférences
+		/*RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+		widget.setTextViewText(R.id.horaire_name, selectedClass);*/
+		//awm.updateAppWidget(appWidgetId, widget);
+		//awm.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.widget_layout);
+		//ch.Comem.HoraireWidgetProvider.onUpdate(null, null, null);
+		AppWidgetManager awm = AppWidgetManager.getInstance(context);
+		int[] appWidgetIds = awm.getAppWidgetIds(new ComponentName(getApplicationContext(), HoraireWidgetProvider.class));
+		Intent result = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+	    result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
+	    result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+		sendBroadcast(result);
+		
+		Toast.makeText(context, R.string.wait, Toast.LENGTH_LONG).show();
 		
 		setResult(RESULT_OK, result);
 		finish();
@@ -304,7 +310,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	 */
 	@Override
 	public void Wsdl2CodeFinished(String methodName, Object Data) {
-		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished");
+		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans la Configuration");
 		Log.e(HoraireWidgetProvider.TAG, methodName);
 		setScheduleInfo(methodName, Data);
 		updateUIFromPreferences();

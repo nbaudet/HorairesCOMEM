@@ -21,7 +21,9 @@
         qui s'exécutera à chaque fois qu'une intention correspondante sera
         diffusée par le système ou une application.
         Permet aussi de spécifier au système que cette app est un widget -->
-        <receiver android:name="ch.Comem.HoraireWidgetProvider">
+        <receiver
+            android:name="ch.Comem.HoraireWidgetProvider"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -45,15 +47,9 @@
         
 
         <!-- Le service qui fournit les nouveaux horaires à intervalles réguliers -->
-<!--         <service android:name="ch.Comem.HoraireWidgetService" -->
-<!--             android:permission="android.permission.BIND_REMOTEVIEWS" -->
-<!--             android:exported="false" /> -->
-
-        <!-- Une balise provider permet d'indiquer les fournisseurs de contenu de
-        notre application.
-        Permet de donner le contenu des horaires -->
-<!--         <provider android:name="ch.Comem.HoraireDataProvider" -->
-<!--               android:authorities="ch.Comem.horairelistwidget.provider" /> -->
+        <service android:name="ch.Comem.HoraireWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
         
     </application>
 

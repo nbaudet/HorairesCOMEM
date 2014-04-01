@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- String généraux -->
+    <!-- Strings généraux -->
     <string name="app_name">Horaires COMEM</string>
     <string name="empty_view_text">Configurez votre horaire en cliquant sur l\'icône en haut à droite.</string>
     <string name="logo_description">Logo de Horaire Widget</string>
     <string name="horaire_name"></string>
+    
+    <!-- Strings du widget -->
+    <string name="item_format_string">%1$d on %2$s</string>
     
     <!-- Configuration -->
     <string name="config_title">Aide</string>

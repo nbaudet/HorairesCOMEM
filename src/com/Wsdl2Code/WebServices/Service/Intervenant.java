@@ -85,6 +85,6 @@ public class Intervenant implements KvmSerializable {
     }
     
     public String toString(){
-    	return this.fullName;
+    	return this.id;
     }
 }

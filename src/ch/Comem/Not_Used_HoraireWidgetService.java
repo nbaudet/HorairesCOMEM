@@ -3,19 +3,22 @@
  */
 package ch.Comem;
 
+import ch.Comem.HorairesCOMEM.R;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 /**
  * Ce service de vues distantes est utilisé comme une enveloppe et permet d'instancier et de
  * gérer une RemoteViewsFactory qui, à son tour, sert à fournir chacune des vues affichées
  * dans le widget collection.
  */
-public class HoraireWidgetService extends RemoteViewsService {
+public class Not_Used_HoraireWidgetService extends RemoteViewsService {
+	
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new HoraireRemoteViewsFactory(this.getApplicationContext(), intent);
@@ -24,6 +27,10 @@ public class HoraireWidgetService extends RemoteViewsService {
 
 /**
  * La Factory qui va créer et remplir les vues dans les widget collection.
+ * Cette classe doit imiter un adapter personnalisé pour remplir la vue selon
+ * les layouts que l'on veut utiliser, en fonction des préférences et TODO de la taille.
+ * Note : la fabrique n'a pas besoin de connaître le type de widget collection qui servira
+ * à afficher chaque élément.
  */
 class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
@@ -39,15 +46,19 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      */
     public HoraireRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
-        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+        this.intent  = intent;
+        appWidgetId  = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
     /**
      * Configure les connexions/curseurs vers les sources de données.
      * Si cet appel dure plus de 20 secondes, un ANR interviendra !
+     * C'est pourquoi les téléchargements sont détournés dans la méthode
+     * onDataSetChanged.
      */
     public void onCreate() {
+    	Toast.makeText(context, "Service : onCreate", Toast.LENGTH_SHORT).show();
         // Since we reload the cursor in onDataSetChanged() which gets called immediately after
         // onCreate(), we do nothing here.
     }
@@ -58,12 +69,14 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      * l'AppWidgetManager pour déclencher ce gestionnaire.)
      */
     public void onDataSetChanged() {
-        // Refresh the cursor
+        /*// Refresh the cursor
         if (cursor != null) {
             cursor.close();
         }
         cursor = context.getContentResolver().query(HoraireDataProvider.CONTENT_URI, null, null,
-                null, null);
+                null, null);*/
+    	
+    	Toast.makeText(context, "Service : onDataSetChanged", Toast.LENGTH_SHORT).show();
     }
     
     /**
@@ -85,6 +98,7 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      * Renvoie l'identifiant unique associé à l'élément d'indice indiqué.
      */
     public long getItemId(int position) {
+    	// TODO seulement si des ID pour les horaires particuliers sont nécessaires
         return position;
     }
     
@@ -109,31 +123,37 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      */
     public RemoteViews getViewAt(int position) {
         // Get the data for this position from the content provider
-        /*String day = "Unknown Day";
+        String day = "Unknown Day";
         int temp = 0;
-        if (mCursor.moveToPosition(position)) {
+        /*if (mCursor.moveToPosition(position)) {
             final int dayColIndex = mCursor.getColumnIndex(HoraireDataProvider.Columns.DAY);
             final int tempColIndex = mCursor.getColumnIndex(
                     HoraireDataProvider.Columns.TEMPERATURE);
             day = mCursor.getString(dayColIndex);
             temp = mCursor.getInt(tempColIndex);
-        }
+        }*/
+        
 
         // Return a proper item with the proper day and temperature
-        final String formatStr = mContext.getResources().getString(R.string.item_format_string);
-        final int itemId = R.layout.widget_item;
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
-        rv.setTextViewText(R.id.widget_item, String.format(formatStr, temp, day));
+        final String formatStr = context.getResources().getString(R.string.item_format_string);
+        final int itemId = R.layout.display_courses;
+        RemoteViews rv = new RemoteViews(context.getPackageName(), itemId);
+        rv.setTextViewText(R.id.courses_listview, String.format(formatStr, temp, day));
 
         // Set the click intent so that we can handle it and show a toast message
-        final Intent fillInIntent = new Intent();
+        /*final Intent fillInIntent = new Intent();
         final Bundle extras = new Bundle();
         extras.putString(HoraireWidgetProvider.EXTRA_DAY_ID, day);
         fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);*/
 
-        return rv;*/
-    	return new RemoteViews(context.getPackageName(), 1);
+        
+    	// Fais la requête sur les horaires en fonction des paramètres ?
+    	Toast.makeText(context, "Service : getViewAt", Toast.LENGTH_SHORT).show();
+    	
+    	return rv;
+    	
+    	//return new RemoteViews(context.getPackageName(), 1);
     }
     
     /**

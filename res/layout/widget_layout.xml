@@ -49,19 +49,17 @@
             android:src="@drawable/selection_state_config_button"
             android:clickable="true"
 		/>
-        <!-- <ImageView
-            android:id="@+id/param_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:contentDescription="@string/param_icon_description"
-            android:padding="12dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/params" /> -->
 
     </LinearLayout>
+
+<!--     <ListView -->
+<!--         android:id="@+id/courses_list" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="match_parent" -->
+<!--         android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb" -->
+<!--         android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track" > -->
+
+<!--     </ListView> -->
     
     <LinearLayout
         android:id="@+id/courses_list"
@@ -71,27 +69,12 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_date" />
 	    <include layout="@layout/display_courses" />
-        
-        <!-- <ListView
-            android:id="@+id/horaire_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#fff"
-            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-            android:scrollbarTrackVertical="@drawable/scrollbar_vertical_track" >
-        </ListView>-->
         
     </LinearLayout>
 
