@@ -69,12 +69,12 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_courses" />
-	    <include layout="@layout/display_courses" />
+<!-- 	    <include layout="@layout/display_courses" /> -->
+<!-- 	    <include layout="@layout/display_courses" /> -->
+<!-- 	    <include layout="@layout/display_courses" /> -->
+<!-- 	    <include layout="@layout/display_courses" /> -->
+<!-- 	    <include layout="@layout/display_courses" /> -->
+<!-- 	    <include layout="@layout/display_courses" /> -->
         
     </LinearLayout>
 

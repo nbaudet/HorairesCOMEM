@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
@@ -27,7 +26,6 @@ import android.widget.Toast;
 import ch.Comem.HorairesCOMEM.R;
 
 import com.Wsdl2Code.WebServices.Service.IWsdl2CodeEvents;
-import com.Wsdl2Code.WebServices.Service.RequestEntity;
 import com.Wsdl2Code.WebServices.Service.Service;
 
 public class Configuration extends Activity implements IWsdl2CodeEvents {
@@ -35,7 +33,6 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 	
 	private Service service;
-	private RequestEntity req;
 	private ScheduleInfoFactory sf = null;
 	
 	// Stockage des préférences
@@ -71,13 +68,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		// Attaque du webservice pour remplir les champs
 		if(this.sf == null){
 			Toast.makeText(getApplicationContext(), R.string.wait, Toast.LENGTH_LONG).show();
-			new AsyncTask<Void, Void, Void>() {
-		    	@Override
-		    	protected Void doInBackground(Void... params) {
-		    		callWebService();
-					return null;
-		    	}
-			}.execute();
+			callWebService();
 		}
 		else{
 			Toast.makeText(getApplicationContext(), "SF déjà setté.", Toast.LENGTH_SHORT).show();
@@ -260,12 +251,6 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		edit.putString(PREF_TIME + String.valueOf(appWidgetId), selectedNumDays);
 		edit.commit();
 		
-		//TODO spécifier le widget à updater avec ces préférences
-		/*RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-		widget.setTextViewText(R.id.horaire_name, selectedClass);*/
-		//awm.updateAppWidget(appWidgetId, widget);
-		//awm.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.widget_layout);
-		//ch.Comem.HoraireWidgetProvider.onUpdate(null, null, null);
 		AppWidgetManager awm = AppWidgetManager.getInstance(context);
 		int[] appWidgetIds = awm.getAppWidgetIds(new ComponentName(getApplicationContext(), HoraireWidgetProvider.class));
 		Intent result = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);

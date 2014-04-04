@@ -8,7 +8,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -23,11 +22,11 @@ import com.Wsdl2Code.WebServices.Service.VectorScheduleEntity;
 /**
  * La classe qui fournit le widget.
  */
-public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2CodeEvents {
+public class HoraireWidgetProvider extends AppWidgetProvider {
     
 	public static String TAG = "HoraireWidgetProvider";
 	public static String EXTRA_APPWIDGET_ID;
-	public Service service;
+	//private Service service;
 	public ScheduleInfoFactory sf;
 	
 	private Context context; 
@@ -169,7 +168,6 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
      * Permet l'affichage de l'interface, et est appelée lors des rafraîchissements commandés
      * par le gestionnaire de bureau.
      */
-    @SuppressWarnings("deprecation")
 	@Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     	
@@ -182,30 +180,71 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
     	
     	// Configuration de l'interface de chaque widget
     	for (int i = 0; i < appWidgetIds.length; ++i) {
+    		
     		final int appWidgetId = appWidgetIds[i];
     		//Toast.makeText(context, Integer.toString(appWidgetId), Toast.LENGTH_SHORT).show();
     		
-    		// Mise à jour widget courant en fonction des paramètres
     		updateWidgetName(context, rv, R.id.horaire_name, appWidgetId);
     		
+    		// Listener sur le bouton de configuration
     		Intent intent = new Intent(context, Configuration.class);
         	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        	// <3 http://stackoverflow.com/questions/4011178/multiple-instances-of-widget-only-updating-last-widget
+        	// thanks to http://stackoverflow.com/questions/4011178/multiple-instances-of-widget-only-updating-last-widget
         	PendingIntent pi = PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);;
         	rv.setOnClickPendingIntent(R.id.config_button, pi);
-        	
-        	// Attaque du webservice pour remplir les champs
-    		if(this.sf == null) {
-				new AsyncTask<Void, Void, Void>() {
-					@Override
-			    	protected Void doInBackground(Void... params) {
-			    		callWebService(HoraireWidgetProvider.this.context, appWidgetId);
-						return null;
-			    	}
-				}.execute();
-    		}
-        	
+
 	        appWidgetManager.updateAppWidget(appWidgetId, rv);
+    		
+    		/*
+    		 * We are being asked to update widget 'i'. To do that, we have to call
+    		 * the Web Service (asynchronously), process the response and update the UI.
+    		 * We should be able to do:
+    		 * 
+    		 * Service service = new Service()
+    		 */
+    		final Service service = new Service(new IWsdl2CodeEvents(){
+
+				@Override
+				public void Wsdl2CodeStartedRequest() {
+				}
+
+				@Override
+				public void Wsdl2CodeFinished(String methodName, Object Data) {
+					//ScheduleInfo scheduleInfo = (ScheduleInfo)Data;
+										
+					Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans le PROVIDER avec l'appel : " + methodName);
+					VectorScheduleEntity se = (VectorScheduleEntity) Data;
+					Log.i(HoraireWidgetProvider.TAG, se.toString());
+					
+					// TODO nettoyer cette partie
+//					AppWidgetManager awm = AppWidgetManager.getInstance(context);
+//					int id = AppWidgetManager.INVALID_APPWIDGET_ID; // TODO Gestion de multiples Widget !
+					
+					/*if(Data != null && Data.getClass().equals(VectorScheduleEntity.class)) {
+						ScheduleFactory sf = new ScheduleFactory(Data);
+					
+						//ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, R.id.courses_listview, sf.getHoraires());
+					    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					    
+					    
+						RemoteViews rv = buildLayout(context, id, sf, true);
+						awm.updateAppWidget(id, rv);
+					}*/
+				}
+
+				@Override
+				public void Wsdl2CodeFinishedWithException(Exception ex) {
+					Log.e(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException dans le PROVIDER");
+				}
+
+				@Override
+				public void Wsdl2CodeEndedRequest() {
+					Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest dans le PROVIDER");
+				}
+    		});
+    		
+			callWebService(service, HoraireWidgetProvider.this.context, appWidgetId);
+
     	}
     }
 
@@ -220,6 +259,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
     	
     	String horaire_name = getPref(context, HoraireWidgetProvider.PREF_CLASS, appWidgetId);
     	
+    	// TODO Mieux gérer la personnalisation du titre en fonction des préférences  
     	if(horaire_name == null)
     		horaire_name = "Horaires COMEM";
     	
@@ -234,7 +274,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId, Bundle newOptions) {
 
-    	//Toast.makeText(context, "HoWi:onAppWidgetOptionsChanged", Toast.LENGTH_SHORT).show();
+    	Log.w(HoraireWidgetProvider.TAG, "Dans onAppwidgetOptionsChanged");
     	
         //RemoteViews layout;
         /*if (minHeight < 100) {
@@ -252,9 +292,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
 	/**
 	 * Lance une tâche asynchrone pour récupérer les horaires du webservice.
 	 */
-	public void callWebService(Context context, int appWidgetId){
-		
-		int pos;
+	public void callWebService(Service service, Context context, int appWidgetId){
 		
 		String selectedClass   = getPref(context, PREF_CLASS,   appWidgetId);
 		String selectedCourse  = getPref(context, PREF_COURSE,  appWidgetId);
@@ -271,7 +309,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
 		
 		Log.i(HoraireWidgetProvider.TAG, "Infos dans callWebService : " + selectedClass + selectedCourse + selectedTeacher + selectedColor + selectedNumDays);
 		
-		this.service = new Service(this);
+		//this.service = new Service(this);
 		RequestEntity req = new RequestEntity();
 		//req.startingDate = "";
 		//req.endingDate = "";
@@ -327,69 +365,14 @@ public class HoraireWidgetProvider extends AppWidgetProvider implements IWsdl2Co
 		
 		try {
 			// Et on appelle le webservice qui va bien.
-			this.service.GetScheduleAsync(req);
+			service.GetScheduleAsync(req);
 			
 		} catch (Exception e) {
-			displayError();
 			e.printStackTrace();
 		}
 		
 	}
-	
-	@Override
-	public void Wsdl2CodeStartedRequest() {
-		Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeStartedRequest dans le PROVIDER");
-		//Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " est en train d'attaquer le webservice.", Toast.LENGTH_SHORT).show();
-	}
-	
-	/**
-	 * Fonction exécutée lorsque l'activité reçoit les horaires du webservice.
-	 */
-	@Override
-	public void Wsdl2CodeFinished(String methodName, Object Data) {
-		Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans le PROVIDER avec l'appel : " + methodName);
-		VectorScheduleEntity se = (VectorScheduleEntity) Data;
-		Log.i(HoraireWidgetProvider.TAG, se.toString());
-		
-		AppWidgetManager awm = AppWidgetManager.getInstance(context);
-		int id = AppWidgetManager.INVALID_APPWIDGET_ID; // TODO Gestion de multiples Widget !
-		
-		/*if(Data != null && Data.getClass().equals(VectorScheduleEntity.class)) {
-			ScheduleFactory sf = new ScheduleFactory(Data);
-		
-			//ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, R.id.courses_listview, sf.getHoraires());
-		    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		    
-		    
-			RemoteViews rv = buildLayout(context, id, sf, true);
-			awm.updateAppWidget(id, rv);
-		}*/
-	}
-	
-	/**
-	 * Fonction exécutée lorsque le webservice a rencontré une erreur.
-	 * @param ex L'exception qui a été levée
-	 */
-	@Override
-	public void Wsdl2CodeFinishedWithException(Exception ex) {
-		Log.e(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException dans le PROVIDER");
-	}
-	/**
-	 * Fonction exécutée lorsque le webservice ne retourne pas de cours.
-	 */
-	@Override
-	public void Wsdl2CodeEndedRequest() {
-		Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest dans le PROVIDER");
-		// TODO Ajouter une vue "pas d'horaire" au widget
-	}
-	
-	/**
-	 * Fonction s'appelant lorsque l'attaque du webservice a échoué
-	 */
-	public void displayError(){
-		Toast.makeText(this.context, R.string.error, Toast.LENGTH_SHORT).show();
-	}
-	
+
 	/**
 	 * Permet de récupérer les préférences de chaque widget.
 	 * @param context Le context de l'appli
