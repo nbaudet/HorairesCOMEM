@@ -28,6 +28,12 @@ import ch.Comem.HorairesCOMEM.R;
 import com.Wsdl2Code.WebServices.Service.IWsdl2CodeEvents;
 import com.Wsdl2Code.WebServices.Service.Service;
 
+/**
+ * Cette activité affiche l'interface de configuration des préférences pour ses horaires.
+ * Elle fait appel au webservice de la HEIG pour peupler les spinners de l'interface.
+ * @author nicolas
+ *
+ */
 public class Configuration extends Activity implements IWsdl2CodeEvents {
 
 	private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
