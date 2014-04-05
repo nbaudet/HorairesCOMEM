@@ -52,6 +52,17 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/courses_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="#77F5F5F5"
+        android:text="Affichage de l&apos;horaire"
+        android:textAllCaps="false"
+        android:textColor="#232323"
+        android:textSize="16sp" />
+    
 <!--     <ListView -->
 <!--         android:id="@+id/courses_list" -->
 <!--         android:layout_width="fill_parent" -->
@@ -61,13 +72,13 @@
 
 <!--     </ListView> -->
     
-    <LinearLayout
-        android:id="@+id/courses_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center|top"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+<!--     <LinearLayout -->
+<!--         android:id="@+id/courses_list" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="0dp" -->
+<!--         android:layout_gravity="center|top" -->
+<!--         android:layout_weight="1" -->
+<!--         android:orientation="vertical" > -->
 
 <!-- 	    <include layout="@layout/display_courses" /> -->
 <!-- 	    <include layout="@layout/display_courses" /> -->
@@ -76,7 +87,7 @@
 <!-- 	    <include layout="@layout/display_courses" /> -->
 <!-- 	    <include layout="@layout/display_courses" /> -->
         
-    </LinearLayout>
+<!--     </LinearLayout> -->
 
     <!-- <Button
         android:id="@+id/bouton"

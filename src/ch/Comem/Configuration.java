@@ -129,10 +129,10 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 		int pos;
 		Context context = getApplicationContext();
 		
-		String selectedClass = getPref(context, PREF_CLASS);
-		String selectedCourse = getPref(context, PREF_COURSE);
+		String selectedClass   = getPref(context, PREF_CLASS);
+		String selectedCourse  = getPref(context, PREF_COURSE);
 		String selectedTeacher = getPref(context, PREF_TEACHER);
-		String selectedColor = getPref(context, PREF_COLOR);
+		String selectedColor   = getPref(context, PREF_COLOR);
 		String selectedNumDays = getPref(context, PREF_TIME);
 		
 		// On set les préférences dans les spinners
@@ -292,7 +292,7 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	
 	@Override
 	public void Wsdl2CodeStartedRequest() {
-		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeStartedRequest");
+		Log.d(HoraireWidgetProvider.TAG, "Wsdl2CodeStartedRequest");
 		//Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " est en train d'attaquer le webservice.", Toast.LENGTH_SHORT).show();
 	}
 	
@@ -301,8 +301,8 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	 */
 	@Override
 	public void Wsdl2CodeFinished(String methodName, Object Data) {
-		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans la Configuration");
-		Log.e(HoraireWidgetProvider.TAG, methodName);
+		Log.d(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans la Configuration");
+		Log.d(HoraireWidgetProvider.TAG, methodName);
 		setScheduleInfo(methodName, Data);
 		updateUIFromPreferences();
 		//Toast.makeText(getApplicationContext(), HoraireWidgetProvider.TAG + " a reçu les infos du webservice.", Toast.LENGTH_SHORT).show();
@@ -314,12 +314,12 @@ public class Configuration extends Activity implements IWsdl2CodeEvents {
 	 */
 	@Override
 	public void Wsdl2CodeFinishedWithException(Exception ex) {
-		Log.e(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException");
+		Log.d(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException");
 		//Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
 	}
 	@Override
 	public void Wsdl2CodeEndedRequest() {
-		Log.e(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest");
+		Log.d(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest");
 	}
 	
 	/**

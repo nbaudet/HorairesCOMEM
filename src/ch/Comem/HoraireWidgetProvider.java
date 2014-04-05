@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import ch.Comem.HorairesCOMEM.R;
@@ -26,8 +27,6 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     
 	public static String TAG = "HoraireWidgetProvider";
 	public static String EXTRA_APPWIDGET_ID;
-	//private Service service;
-	public ScheduleInfoFactory sf;
 	
 	private Context context; 
 	
@@ -70,35 +69,13 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         
         this.context = ctx;
         
-        // Réception du clic sur le bouton OK de l'activité de configuration
         if(action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
-        	Toast.makeText(ctx, "HoWi:onReceive", Toast.LENGTH_SHORT).show();
+        	Log.d(HoraireWidgetProvider.TAG, "HoWi:onReceive");
         }
         
     	super.onReceive(ctx, intent);
     }
 
-    /**
-     * Ajoute les horaires reçus à l'interface
-     * @param context
-     * @param courses
-     * @param largeLayout
-     * @return
-     */
-    private RemoteViews buildLayout(Context context, int appWdigetId, ScheduleFactory courses, boolean largeLayout) {
-    	Toast.makeText(context, "HoWi:buildLayout", Toast.LENGTH_SHORT).show();
-    	Log.i(HoraireWidgetProvider.TAG, courses.toString());
-    	
-    	RemoteViews rv = new RemoteViews(context.getPackageName(), R.id.courses_listview);
-    	ArrayList<String> horaires = courses.getHoraires();
-    	
-    	for(String se : horaires) {
-    		rv.setTextViewText(appWdigetId, se);
-    	}
-    	
-    	return rv;
-    }
-    
     /**
      * Construit l'interface à jour du widget dans une vue distante et la renvoie.
      * @param context Le contexte de l'application
@@ -169,7 +146,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
      * par le gestionnaire de bureau.
      */
 	@Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     	
     	super.onUpdate(context, appWidgetManager, appWidgetIds);
     	
@@ -210,36 +187,34 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 
 				@Override
 				public void Wsdl2CodeFinished(String methodName, Object Data) {
-					//ScheduleInfo scheduleInfo = (ScheduleInfo)Data;
-										
-					Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans le PROVIDER avec l'appel : " + methodName);
-					VectorScheduleEntity se = (VectorScheduleEntity) Data;
-					Log.i(HoraireWidgetProvider.TAG, se.toString());
 					
-					// TODO nettoyer cette partie
-//					AppWidgetManager awm = AppWidgetManager.getInstance(context);
-//					int id = AppWidgetManager.INVALID_APPWIDGET_ID; // TODO Gestion de multiples Widget !
+					Log.d(HoraireWidgetProvider.TAG, "Wsdl2CodeFinished dans le PROVIDER avec l'appel : " + methodName);
+					HoWiHoraire horaire = new HoWiHoraire((VectorScheduleEntity) Data);
+					Log.d(HoraireWidgetProvider.TAG, horaire.toString());
 					
-					/*if(Data != null && Data.getClass().equals(VectorScheduleEntity.class)) {
-						ScheduleFactory sf = new ScheduleFactory(Data);
+					// TODO gérer l'affichage
+					AppWidgetManager awm = AppWidgetManager.getInstance(context);
 					
-						//ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, R.id.courses_listview, sf.getHoraires());
-					    //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					if(horaire != null) {
+						ArrayAdapter adapter = new ArrayAdapter(context, R.id.courses_list);
+					    adapter.addAll(horaire.toString());
 					    
 					    
-						RemoteViews rv = buildLayout(context, id, sf, true);
-						awm.updateAppWidget(id, rv);
-					}*/
+						//RemoteViews rv = buildLayout(context, appWidgetId, sf, true);
+					    RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+					    rv.setTextViewText(R.id.courses_list, horaire.toString());
+						awm.updateAppWidget(appWidgetId, rv);
+					}
 				}
 
 				@Override
 				public void Wsdl2CodeFinishedWithException(Exception ex) {
-					Log.e(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException dans le PROVIDER");
+					Log.d(HoraireWidgetProvider.TAG , "Wsdl2CodeFinishedWithException dans le PROVIDER");
 				}
 
 				@Override
 				public void Wsdl2CodeEndedRequest() {
-					Log.i(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest dans le PROVIDER");
+					Log.d(HoraireWidgetProvider.TAG, "Wsdl2CodeEndedRequest dans le PROVIDER");
 				}
     		});
     		
@@ -274,7 +249,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId, Bundle newOptions) {
 
-    	Log.w(HoraireWidgetProvider.TAG, "Dans onAppwidgetOptionsChanged");
+    	Log.d(HoraireWidgetProvider.TAG, "Dans onAppwidgetOptionsChanged");
     	
         //RemoteViews layout;
         /*if (minHeight < 100) {
@@ -286,12 +261,27 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
         //appWidgetManager.updateAppWidget(appWidgetId, layout);
     }
     
+    @Override
+    public void onDeleted(Context contect, int[] appWidgetIds) {
+    	Log.d(TAG, "onDeleted");
+    	// TODO Se renseigner si utile de faire cette partie
+        // On efface les préférences associées ce widget
+        /*final int N = appWidgetIds.length;
+        for (int i=0; i<N; i++) {
+            ExampleAppWidgetConfigure.deleteTitlePref(context, appWidgetIds[i]);
+        }*/
+    }
+    
     /*********************************************************************
 	 * Gestion des tâches asynchrones pour le webservice
 	 ********************************************************************/
-	/**
-	 * Lance une tâche asynchrone pour récupérer les horaires du webservice.
-	 */
+    /**
+     * Lance une tâche asynchrone pour récupérer les horaires du webservice.
+     * Remarque : les dates du webservice sont de format <mois>-<jour>-<année>
+     * @param service Le webservice
+     * @param context Le contexte courant
+     * @param appWidgetId L'id du widget pour lequel on fait la requête
+     */
 	public void callWebService(Service service, Context context, int appWidgetId){
 		
 		String selectedClass   = getPref(context, PREF_CLASS,   appWidgetId);
@@ -307,19 +297,20 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 		if(selectedTeacher == null)
 			selectedTeacher = HoraireWidgetProvider.DEFAULT_TEACHER;
 		
-		Log.i(HoraireWidgetProvider.TAG, "Infos dans callWebService : " + selectedClass + selectedCourse + selectedTeacher + selectedColor + selectedNumDays);
+		Log.d(HoraireWidgetProvider.TAG, "Infos dans callWebService : " + selectedClass + selectedCourse + selectedTeacher + selectedColor + selectedNumDays);
 		
 		//this.service = new Service(this);
 		RequestEntity req = new RequestEntity();
-		//req.startingDate = "";
-		//req.endingDate = "";
+		//req.startingDate = "05-04-2014";
+		//req.endingDate   = "2014-02-25";
+		req.startingDate = "04-05-2014";
 		
 		// Définition de la requête en fonction des préférences
 		if(		!selectedClass.equals(HoraireWidgetProvider.DEFAULT_CLASS) &&
 				!selectedCourse.equals(HoraireWidgetProvider.DEFAULT_COURSE) &&
 				!selectedTeacher.equals(HoraireWidgetProvider.DEFAULT_TEACHER)) {
 			
-			Log.i(HoraireWidgetProvider.TAG, "RECHERCHE POUR TOUS");
+			Log.d(HoraireWidgetProvider.TAG, "RECHERCHE POUR TOUS");
 			req.classIdField = selectedClass;
 			req.teacherId    = selectedTeacher;
 			req.courseId     = selectedCourse;
@@ -328,19 +319,19 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 		}
 		
 		else if(!selectedClass.equals(DEFAULT_CLASS) && !selectedCourse.equals(DEFAULT_COURSE)) {
-			Log.i(HoraireWidgetProvider.TAG, "RECHERCHE POUR UNE CLASSE ET UN COURS");
+			Log.d(HoraireWidgetProvider.TAG, "RECHERCHE POUR UNE CLASSE ET UN COURS");
 			req.classIdField = selectedClass;
 			req.courseId     = selectedCourse;
 		}
 		
 		else if(!selectedClass.equals(DEFAULT_CLASS) && !selectedTeacher.equals(DEFAULT_TEACHER)) {
-			Log.i(HoraireWidgetProvider.TAG, "RECHERCHE POUR UNE CLASSE ET UN INTERVENANT");
+			Log.d(HoraireWidgetProvider.TAG, "RECHERCHE POUR UNE CLASSE ET UN INTERVENANT");
 			req.classIdField = selectedClass;
 			req.teacherId    = selectedTeacher;
 		}
 		
 		else if(!selectedCourse.equals(DEFAULT_COURSE) && !selectedTeacher.equals(DEFAULT_TEACHER)) {
-			Log.i(HoraireWidgetProvider.TAG, "RECHERCHE POUR UN COURS ET UN INTERVENANT");
+			Log.d(HoraireWidgetProvider.TAG, "RECHERCHE POUR UN COURS ET UN INTERVENANT");
 			req.courseId  = selectedCourse;
 			req.teacherId = selectedTeacher;
 		}
@@ -349,17 +340,17 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 			// Si on n'a choisi qu'une classe
 			if(!selectedClass.equals(DEFAULT_CLASS)) {
 				req.classIdField = selectedClass;
-				Log.i(HoraireWidgetProvider.TAG, "On fait une recherche pour une classe");
+				Log.d(HoraireWidgetProvider.TAG, "On fait une recherche pour une classe");
 			}
 			// Si on n'a choisi qu'un intervenant
 			if(!selectedTeacher.equals(DEFAULT_TEACHER)) {
 				req.teacherId = selectedTeacher;
-				Log.i(HoraireWidgetProvider.TAG, "On fait une recherche pour un intervenant");
+				Log.d(HoraireWidgetProvider.TAG, "On fait une recherche pour un intervenant");
 			}
 			// Si on n'a choisi qu'un cours
 			if(!selectedCourse.equals(DEFAULT_COURSE)) {
 				req.courseId = selectedCourse;
-				Log.i(HoraireWidgetProvider.TAG, "On fait une recherche pour un cours");
+				Log.d(HoraireWidgetProvider.TAG, "On fait une recherche pour un cours");
 			}
 		}
 		

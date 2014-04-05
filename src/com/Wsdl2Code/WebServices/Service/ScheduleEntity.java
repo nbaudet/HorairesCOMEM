@@ -220,11 +220,15 @@ public class ScheduleEntity implements KvmSerializable {
     public void setProperty(int arg0, Object arg1) {
     }
     
+    /**
+     * Rend les informations d'un horaire.
+     * @return Les informations d'horaire légèrement mises en page
+     */
     public String toString(){
-    	StringBuilder sb = new StringBuilder(200);
-    	sb.append("<b>"+this.courseId+"</b> - ");
-    	sb.append(this.teacherId + "\n");
-    	sb.append(this.room);
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(this.courseId + " - ");
+    	sb.append(this.room + "\n");
+    	sb.append(this.teacherId);
     	return sb.toString();
     }
 }

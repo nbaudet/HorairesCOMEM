@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import com.Wsdl2Code.WebServices.Service.Classe;
 import com.Wsdl2Code.WebServices.Service.Cours;
 import com.Wsdl2Code.WebServices.Service.Intervenant;
-import com.Wsdl2Code.WebServices.Service.ScheduleEntity;
 import com.Wsdl2Code.WebServices.Service.ScheduleInfo;
 import com.Wsdl2Code.WebServices.Service.VectorClasse;
 import com.Wsdl2Code.WebServices.Service.VectorCours;
 import com.Wsdl2Code.WebServices.Service.VectorIntervenant;
 
+/**
+ * Cette classe permet de gérer les informations 
+ * @author nicolas
+ *
+ */
 public class ScheduleInfoFactory {
 
 	private ArrayList<String> classes, cours, intervenants, modules;

@@ -19,14 +19,14 @@ import android.widget.RemoteViewsService;
 public class HoraireWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new HoraireRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new NotUsedHoraireRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 }
 
 /**
  * La Factory qui va créer et remplir les vues dans les widget collection.
  */
-class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+class NotUsedHoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
     private Intent intent;
     private Cursor cursor;
@@ -38,7 +38,7 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      * @param context
      * @param intent
      */
-    public HoraireRemoteViewsFactory(Context context, Intent intent) {
+    public NotUsedHoraireRemoteViewsFactory(Context context, Intent intent) {
         this.context = context;
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -93,7 +93,6 @@ class HoraireRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
      * Nombre de définitions de vues différentes.
      */
     public int getViewTypeCount() {
-        // Je pense qu'il n'y en a qu'une...
         return 1;
     }
     
