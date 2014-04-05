@@ -1,7 +1,10 @@
 package ch.Comem;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -9,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
@@ -196,8 +200,8 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 					AppWidgetManager awm = AppWidgetManager.getInstance(context);
 					
 					if(horaire != null) {
-						ArrayAdapter adapter = new ArrayAdapter(context, R.id.courses_list);
-					    adapter.addAll(horaire.toString());
+						/*ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1);
+					    adapter.addAll(horaire.toString());*/
 					    
 					    
 						//RemoteViews rv = buildLayout(context, appWidgetId, sf, true);
@@ -282,6 +286,7 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
      * @param context Le contexte courant
      * @param appWidgetId L'id du widget pour lequel on fait la requête
      */
+	@SuppressLint("SimpleDateFormat")
 	public void callWebService(Service service, Context context, int appWidgetId){
 		
 		String selectedClass   = getPref(context, PREF_CLASS,   appWidgetId);
@@ -296,14 +301,29 @@ public class HoraireWidgetProvider extends AppWidgetProvider {
 			selectedCourse = HoraireWidgetProvider.DEFAULT_COURSE;
 		if(selectedTeacher == null)
 			selectedTeacher = HoraireWidgetProvider.DEFAULT_TEACHER;
+		if(selectedNumDays == null)
+			selectedNumDays = HoraireWidgetProvider.DEFAULT_TIME;
 		
 		Log.d(HoraireWidgetProvider.TAG, "Infos dans callWebService : " + selectedClass + selectedCourse + selectedTeacher + selectedColor + selectedNumDays);
 		
-		//this.service = new Service(this);
+		// Définit les paramètres "fixes" de la requête
 		RequestEntity req = new RequestEntity();
-		//req.startingDate = "05-04-2014";
-		//req.endingDate   = "2014-02-25";
-		req.startingDate = "04-05-2014";
+		int nbJours;
+		if(selectedNumDays.equals("1 semaine")){
+			nbJours = 7;
+		}
+		else if(selectedNumDays.equals("1 mois")) {
+			nbJours = 30;
+		}
+		else {
+			nbJours = 60;
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Date du jour
+        req.startingDate = dateFormat.format(c.getTime());
+        c.add(Calendar.DATE, nbJours); // Date + préférence de l'utilisateur
+        req.endingDate = dateFormat.format(c.getTime());
 		
 		// Définition de la requête en fonction des préférences
 		if(		!selectedClass.equals(HoraireWidgetProvider.DEFAULT_CLASS) &&

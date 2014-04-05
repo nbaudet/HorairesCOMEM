@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="#77F5F5F5"
-        android:text="Affichage de l&apos;horaire"
+        android:text="Affichage de l&apos;horaire..."
         android:textAllCaps="false"
         android:textColor="#232323"
         android:textSize="16sp" />

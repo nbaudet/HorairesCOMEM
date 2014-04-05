@@ -16,7 +16,7 @@ import android.widget.RemoteViewsService;
  * dans le widget collection.
  * @author nicolas
  */
-public class HoraireWidgetService extends RemoteViewsService {
+public class NotUsed_HoraireWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new NotUsedHoraireRemoteViewsFactory(this.getApplicationContext(), intent);

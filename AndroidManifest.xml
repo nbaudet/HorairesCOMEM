@@ -47,7 +47,7 @@
         
 
         <!-- Le service qui fournit les nouveaux horaires à intervalles réguliers -->
-        <service android:name="ch.Comem.HoraireWidgetService"
+        <service android:name="ch.Comem.NotUsed_HoraireWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
         
